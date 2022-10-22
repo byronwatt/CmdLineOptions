@@ -12,10 +12,13 @@ e.g.
 ```c
 void parse_options(int argc, char **argv)
 {
-   if (strcmp(argv[i],"-v")
-  {
-      // set some verbosity flag
-  }
+   if (strncmp(argv[i],"log_level",9) == 0)
+   {
+      // extract and set logging level
+   } else if (strncmp(argv[i],"parse_debug",11) == 0)
+   {
+      // extract and set parse debug flag.
+   }
 }
 ```
 
@@ -25,7 +28,7 @@ Instead whenever you want an options to be available,... in any module you defin
 
 Maybe in `log.c` you have a global variable like:
 ```c++
-IntOption option_verbosity( "verbosity", "set the verbosity from 0..9" );
+IntOption option_log_level( "log_level", "set the log_level from 0..9" );
 ```
 
 Maybe in `parse.c` you have a flag for extra debugging:
@@ -42,3 +45,11 @@ And this 'magically' updates all those variables in those other `.c` files that 
 The 'magic' isn't really magic, each option is a static object with a static initializer that adds the option to a global list.
 
 This all happens before `main()` is called.
+
+oh,... and environment variables are also checked for that match the option name.
+
+e.g. export PROJECT_log_level=1
+
+Is the same as adding log_level=1 on the command line.
+
+# todo: add some example code
