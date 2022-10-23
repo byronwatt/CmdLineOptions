@@ -67,7 +67,7 @@ A string list terminates if it finds an argument that doesn't match a valid comm
 
 I'm really lazy,... so I didn't bother requiring that you put a '-' in front of an argument.
 
-e.g.  log_level=1 is allowed as is -log_level=1 as is --log_level=1 as is any number of minus signs.
+e.g.  `log_level=1` is allowed as is `-log_level=1` as is `--log_level=1` as is any number of minus signs.
 
 ### short options
 
