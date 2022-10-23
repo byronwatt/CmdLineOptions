@@ -1,7 +1,7 @@
 # CmdLineOptions
 Yet another command line parser for c++.
 
-This command line parser lets you scatter options throughout your code base, and top level main() function doesn't need to know anything about them.
+This command line parser lets you scatter options throughout your code base, and the top level main() function doesn't need to know anything about them.
 
 Just like how googletest doesn't need to know about all the GTEST() macros to run those tests, this command line parser doesn't need to know about all the command line options exposed in your code.
 
@@ -47,7 +47,7 @@ e.g. export PROJECT_log_level=1
 
 Is the same as adding log_level=1 on the command line.
 
-## Todo: add some example code
+## Todo: add some example code and some test scripts
 
 ## Confessions from the author
 
