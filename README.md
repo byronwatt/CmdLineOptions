@@ -120,7 +120,7 @@ At Microchip, we found it is nice to allow changing options on the fly, e.g. one
 
 ## xterm window title
 
-The projects that use this command line parser often use multiple windows for running the simulator and firmware and host code, so as a hack, we modify the xterm window title inside ParseOptions with:
+The projects that use this command line parser often use multiple windows for running the simulator and firmware and host code, so to help with keeping thing sorted, we modify the xterm window title inside ParseOptions to include the program name with:
 
 ```c++
 printf("\033]0;%s\007",window_title.c_str());
