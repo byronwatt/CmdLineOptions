@@ -1,55 +1,112 @@
 # CmdLineOptions
-yet another command line parser for c++ 
+Yet another command line parser for c++.
 
-## What is it good for
+This command line parser lets you scatter options throughout your code base, and top level main() function doesn't need to know anything about them.
 
-Command line parsers are annoying.
+Just like how googletest doesn't need to know about all the GTEST() macros to run those tests, this command line parser doesn't need to know about all the command line options exposed in your code.
 
-Typically in your top level source file right beside main() you define a parse_options() function and a usage() message, and if there are any wierd flags in different modules, you have to include all these files and take actions when those flags are set.
+## Notes from the author 
 
-e.g.
+At Microchip, we have hundreds of standalone test programs for different features of our products, and we have a lot of common options that can be used to help with investigating and auditing execution.  
 
-```c
-void parse_options(int argc, char **argv)
-{
-   if (strncmp(argv[i],"log_level",9) == 0)
-   {
-      // extract and set logging level
-   } else if (strncmp(argv[i],"parse_debug",11) == 0)
-   {
-      // extract and set parse debug flag.
-   }
-}
-```
+Often when you are debugging a problem you tweak some variables and recompile to turn on a certain feature.  But in many cases, it is possible to achieve the same effect with a runtime call or global variable, and exposing that variable through a command line option leads to all sorts of convenient features.  Having all these easily accessible run-time knobs is very convenient as a developer, but also lets you document various workflows in a straight-forward manner.
 
-This command line parser doesn't do that.
+For instance, sometimes we want to generate an audit trail of all the actions performed. Sometimes we want to add a delay after each action, or sometimes we want to test with a different version of the firmware, or we want to specify a host/port for a simulator, or which board number to test or change a timeout.
 
-Instead whenever you want an options to be available,... in any module you define the option like:
+All of these 'nice to have' options would make writing a parse_options tool annoying, unless the parse_options function could somehow discover all the options that are 'inside' the libraries being used.
 
-Maybe in `log.c` you have a global variable like:
+So that's what this package provides: In any source file, you can define an option.
+
+## Overview 
+
+Maybe in `log.cpp` you have a global variable like:
 ```c++
-IntOption option_log_level( "log_level", "set the log_level from 0..9" );
+static IntOption option_log_level( "log_level", 0, "set the log_level from 0..9" );
 ```
 
-Maybe in `parse.c` you have a flag for extra debugging:
+Maybe in `parse.cpp` you have a flag for extra debugging:
 ```c++
-BoolOption option_parse_debug( "parse_debug", "enable lots of debugging for the parser" );
+static BoolOption option_parse_debug( "parse_debug", false, "enable lots of debugging for the parser" );
 ```
 
-In `main.c` you just call:
+In `main.cpp` you just call:
 ```c++
-CmdLineOptions::ParseOptions( argc, argv );
+CmdLineOptions::InstanceGet()->ParseOptions( argc, argv );
 ```
-And this 'magically' updates all those variables in those other `.c` files that it knew nothing about, and generates a help message if an invalid option is specified.
+And this 'magically' updates all those variables in those other `.cpp` files that it knew nothing about, and generates a help message if an invalid option is specified.
 
-The 'magic' isn't really magic, each option is a static object with a static initializer that adds the option to a global list.
+The 'magic' isn't really magic, each option is a static object with a static initializer that updates a global list.
 
 This all happens before `main()` is called.
 
-oh,... and environment variables are also checked for that match the option name.
+## Environment variables
+
+Oh,... and environment variables are also checked that match the option name, which is sometimes convenient if the test you are running is inside a script that you don't want to modify.
 
 e.g. export PROJECT_log_level=1
 
 Is the same as adding log_level=1 on the command line.
 
-# todo: add some example code
+## Todo: add some example code
+
+## Confessions from the author
+
+### Positional arguments
+
+The parser doesn't handle positional arguments, we just didn't need it to handle positional arguments for our purposes.
+
+It does have a 'list' argument, like a list of integers or a list of strings.  Both of those go into vector<int> or vector<const char *>
+
+e.g. If somewhere in your code you have:
+
+```c++
+static IntListOption option_channels("channels:", "list of channels to use");
+```
+Then on the command line you can type:
+```bash
+program channels: 0 1 2 3
+```
+
+An integer list terminates if it finds an argument that isn't a valid integer.
+
+A string list terminates if it finds an argument that doesn't match a valid command line option.
+
+### '-' or '--'
+
+I'm really lazy,... so I didn't bother requiring that you put a '-' in front of an argument.
+
+e.g.  log_level=1 is allowed as is -log_level=1 as is --log_level=1 as is any number of minus signs.
+
+
+
+### Enumerations
+
+enumerations are a little clunky,
+
+You have to provide the list of string -> value matches in the constructor:
+
+```c++
+static option_log_level EnumOption(1, "log_level", "set SW APPLIB logging level (0=DEBUG,1=INFO,2=WARNING,3=ERROR,4=CRITICAL)") {
+    AddEnum(0,"DEBUG");
+    AddEnum(1,"INFO");
+    AddEnum(2,"WARNING");
+    AddEnum(3,"ERROR");
+    AddEnum(4,"CRITICAL");
+}
+```
+
+then you can use a command line option like:
+```
+log_level=DEBUG
+```
+but if you try to set it to an invalid enumeration it displays a help message with the valid enumerations.
+
+## ParseString
+
+At Microchip, we often have a utility program that we repeatedly with different arguments to do little things.  As an optimization to reduce startup time, we allow that program to be called with a script file as input, so we use the ParseString() and Reset() functions to pretend the program was called again with different command line arguments.
+
+## ParseOptionsOrError
+
+At Microchip, we found it is nice to allow changing options on the fly, e.g. one program can send a message to another program messages to adjust it's runtime flags,... the ParseOptionsOrError() can return an error message to the caller rather than exit'ing with the error message displayed to stderr. 
+
+

@@ -1465,6 +1465,7 @@ void CmdLineOptions::ParseOptions( int argc, const char **argv ) {
             window_title += " ";
             window_title += s;
         }
+        // modify the xterm window title to match the program name
         printf("\033]0;%s\007",window_title.c_str());
     }
     for (i = 1;i<argc;i++) {
