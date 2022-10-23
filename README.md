@@ -77,7 +77,13 @@ I'm really lazy,... so I didn't bother requiring that you put a '-' in front of 
 
 e.g.  log_level=1 is allowed as is -log_level=1 as is --log_level=1 as is any number of minus signs.
 
+### short options
 
+There's no feature to combine a bunch of boolean options with a bunch of single letter options.
+
+There is an 'alias' feature,... perhaps you could say 'everything' is the same as 'verbosity=9 parse_debug=true audit_trail=audit.txt" 
+
+But there's no way to have single character options,... maybe that's just my personal preference, I'm too stupid to remember single character flags.
 
 ### Enumerations
 
