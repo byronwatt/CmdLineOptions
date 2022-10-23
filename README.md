@@ -108,8 +108,8 @@ e.g. export PROJECT_log_level=1
 
 Is the same as adding log_level=1 on the command line.
     
-But the project name prefix is hard-coded inside `CmdLineOption::SetFromEnvironmentVariable()` currently 
-    
+Note: the project name prefix is hard-coded inside `CmdLineOption::SetFromEnvironmentVariable()`.
+
 ### ParseString
 
 At Microchip, we often have a utility program that we repeatedly with different arguments to do little things.  As an optimization to reduce startup time, we allow that program to be called with a script file as input, so we use the ParseString() and Reset() functions to pretend the program was called again with different command line arguments.
