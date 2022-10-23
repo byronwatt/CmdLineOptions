@@ -100,7 +100,7 @@ log_level=DEBUG
 but if you try to set it to an invalid enumeration it displays a help message with the valid enumerations.
 
 
-## Environment variables
+### Environment variables
 
 Environment variables are also checked that match the option name, which is sometimes convenient if the test you are running is inside a script that you don't want to modify.
 
@@ -110,15 +110,15 @@ Is the same as adding log_level=1 on the command line.
     
 But the project name prefix is hard-coded inside `CmdLineOption::SetFromEnvironmentVariable()` currently 
     
-## ParseString
+### ParseString
 
 At Microchip, we often have a utility program that we repeatedly with different arguments to do little things.  As an optimization to reduce startup time, we allow that program to be called with a script file as input, so we use the ParseString() and Reset() functions to pretend the program was called again with different command line arguments.
 
-## ParseOptionsOrError
+### ParseOptionsOrError
 
 At Microchip, we found it is nice to allow changing options on the fly, e.g. one program can send a message to another program messages to adjust it's runtime flags,... the ParseOptionsOrError() can return an error message to the caller rather than exit'ing with the error message displayed to stderr. 
 
-## xterm window title
+### xterm window title
 
 The projects that use this command line parser often use multiple windows for running the simulator and firmware and host code, so to help with keeping thing sorted, we modify the xterm window title inside ParseOptions to include the program name with:
 
@@ -127,3 +127,11 @@ printf("\033]0;%s\007",window_title.c_str());
 ```
 
 but you probably do not want that, so I'll comment that out !
+
+### calling functions instead of setting variables
+
+If you need to call a function in addition to setting a variable, then you can create a derived class and override the virtual function `OptionSet()` and modify it to suit.
+
+The `LogLevelOption` class shows an example of overriding EnumOption and defining a `LogLevelOption::OptionSet()` method for whenever the log_level option is changed.
+
+This might not help much since typically you would parse command line options before you've initialized various libraries.  But occassionally it's useful.
