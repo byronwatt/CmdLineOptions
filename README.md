@@ -97,7 +97,7 @@ then you can use a command line option like:
 ```
 log_level=DEBUG
 ```
-but if you try to set it to an invalid enumeration it displays a help message with the valid enumerations.
+If you try to set it to an invalid enumeration it displays a help message with the valid enumerations.
 
 
 ### Environment variables
