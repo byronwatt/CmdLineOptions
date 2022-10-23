@@ -39,14 +39,6 @@ The 'magic' isn't really magic, each option is a static object with a static ini
 
 This all happens before `main()` is called.
 
-## Environment variables
-
-Oh,... and environment variables are also checked that match the option name, which is sometimes convenient if the test you are running is inside a script that you don't want to modify.
-
-e.g. export PROJECT_log_level=1
-
-Is the same as adding log_level=1 on the command line.
-
 ## Todo: add some example code and some test scripts
 
 ## Confessions from the author
@@ -107,6 +99,17 @@ log_level=DEBUG
 ```
 but if you try to set it to an invalid enumeration it displays a help message with the valid enumerations.
 
+
+## Environment variables
+
+Environment variables are also checked that match the option name, which is sometimes convenient if the test you are running is inside a script that you don't want to modify.
+
+e.g. export PROJECT_log_level=1
+
+Is the same as adding log_level=1 on the command line.
+    
+But the project name prefix is hard-coded inside `CmdLineOption::SetFromEnvironmentVariable()` currently 
+    
 ## ParseString
 
 At Microchip, we often have a utility program that we repeatedly with different arguments to do little things.  As an optimization to reduce startup time, we allow that program to be called with a script file as input, so we use the ParseString() and Reset() functions to pretend the program was called again with different command line arguments.
@@ -115,4 +118,12 @@ At Microchip, we often have a utility program that we repeatedly with different 
 
 At Microchip, we found it is nice to allow changing options on the fly, e.g. one program can send a message to another program messages to adjust it's runtime flags,... the ParseOptionsOrError() can return an error message to the caller rather than exit'ing with the error message displayed to stderr. 
 
+## xterm window title
 
+The projects that use this command line parser often use multiple windows for running the simulator and firmware and host code, so as a hack, we modify the xterm window title inside ParseOptions with:
+
+```c++
+printf("\033]0;%s\007",window_title.c_str());
+```
+
+but you probably do not want that, so I'll comment that out !
