@@ -40,15 +40,15 @@ CmdLineOption::CmdLineOption(const char *_name, const char *_usage_message) :
  * @param[in] s - command line argument string
  * @param[in] error_message - error message
  *
- * @return bool8_t - true if argument string is valid
+ * @return bool - true if argument string is valid
  */
-bool8_t CmdLineOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool CmdLineOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
     if (ParseValue(s))
-        return TRUE;
+        return true;
     error_message << "error parsing '" << s << "'\n";
     error_message << " for option '" << name << "'\n";
     error_message << " option description: " << usage_message << "\n";
-    return FALSE;
+    return false;
 }
 
 /**
@@ -97,7 +97,7 @@ void CmdLineOption::OptionSet()
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-BoolOption::BoolOption( bool8_t default_value, const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message), value(default_value), _default_value(default_value) {
+BoolOption::BoolOption( bool default_value, const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message), value(default_value), _default_value(default_value) {
     SetFromEnvironmentVariable();
 }
 
@@ -150,9 +150,9 @@ AliasOption::AliasOption( const char *_name, const char *_usage_message ) : CmdL
  *
  * @param[in] s - command line argument string
  *
- * @return bool8_t - true if argument string is valid
+ * @return bool - true if argument string is valid
  */
-bool8_t AliasOption::ParseValue( const char *s ) {
+bool AliasOption::ParseValue( const char *s ) {
     char *token;
     char *argv_str = strdup(usage_message);
 
@@ -175,7 +175,7 @@ bool8_t AliasOption::ParseValue( const char *s ) {
     /* parse options with alias'd argc/argv */
     CmdLineOptions::GetInstance()->ParseOptions(alias_argv.size(),&(alias_argv[0]));
 
-    return TRUE;
+    return true;
 }
 
 /**
@@ -265,14 +265,14 @@ int32_t parse_int( const char *s, char **temp = NULL )
  *
  * @param[in] s - command line argument string
  *
- * @return bool8_t - true if argument string is valid
+ * @return bool - true if argument string is valid
  */
-bool8_t IntOption::ParseValue( const char *s ) {
+bool IntOption::ParseValue( const char *s ) {
     char *temp;
     value = parse_int(s,&temp);
-    if (*temp != 0) return FALSE;
+    if (*temp != 0) return false;
     /* printf("%s=%d (%x)\n",name,option_field,option_field); */
-    return TRUE;
+    return true;
 }
 
 /**
@@ -282,15 +282,15 @@ bool8_t IntOption::ParseValue( const char *s ) {
  * @param[in] s - command line argument string
  * @param[in] error_message - error message
  *
- * @return bool8_t - true if argument string is valid
+ * @return bool - true if argument string is valid
  */
-bool8_t IntOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool IntOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
     if (ParseValue(s))
-        return TRUE;
+        return true;
     error_message << "error parsing '" << s << "'\n";
     error_message << " for int option '" << name << "'\n";
     error_message << " option description: " << usage_message << "\n";
-    return FALSE;
+    return false;
 }
 
 /**
@@ -341,14 +341,14 @@ uint32_t parse_uint( const char *s, char **temp = NULL )
  *
  * @param[in] s - default value if not specified on command line
  *
- * @return bool8_t - TRUE if option was valid.
+ * @return bool - true if option was valid.
  */
-bool8_t UintOption::ParseValue( const char *s ) {
+bool UintOption::ParseValue( const char *s ) {
     char *temp;
     value = parse_uint(s,&temp);
-    if (*temp != 0) return FALSE;
+    if (*temp != 0) return false;
     /* printf("%s=%d (%x)\n",name,option_field,option_field); */
-    return TRUE;
+    return true;
 }
 
 /**
@@ -358,15 +358,15 @@ bool8_t UintOption::ParseValue( const char *s ) {
  * @param[in] s - command line argument string
  * @param[in] error_message - error message
  *
- * @return bool8_t - true if argument string is valid
+ * @return bool - true if argument string is valid
  */
-bool8_t UintOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool UintOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
     if (ParseValue(s))
-        return TRUE;
+        return true;
     error_message << "error parsing '" << s << "'\n";
     error_message << " for uint option '" << name << "'\n";
     error_message << " option description: " << usage_message << "\n";
-    return FALSE;
+    return false;
 }
 
 /**
@@ -417,14 +417,14 @@ static int64_t parse_int64( const char *s, char **temp = NULL )
  *
  * @param[in] s - default value if not specified on command line
  *
- * @return bool8_t - TRUE if option was valid.
+ * @return bool - true if option was valid.
  */
-bool8_t Int64Option::ParseValue( const char *s ) {
+bool Int64Option::ParseValue( const char *s ) {
     char *temp;
     value = parse_int64(s,&temp);
-    if (*temp != 0) return FALSE;
+    if (*temp != 0) return false;
     /* printf("%s=%d (%x)\n",name,option_field,option_field); */
-    return TRUE;
+    return true;
 }
 
 /**
@@ -434,15 +434,15 @@ bool8_t Int64Option::ParseValue( const char *s ) {
  * @param[in] s - command line argument string
  * @param[in] error_message - error message
  *
- * @return bool8_t - true if argument string is valid
+ * @return bool - true if argument string is valid
  */
-bool8_t Int64Option::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool Int64Option::ParseValueWithError( const char *s, std::ostream &error_message ) {
     if (ParseValue(s))
-        return TRUE;
+        return true;
     error_message << "error parsing '" << s << "'\n";
     error_message << " for int64 option '" << name << "'\n";
     error_message << " option description: " << usage_message << "\n";
-    return FALSE;
+    return false;
 }
 
 /**
@@ -493,14 +493,14 @@ static uint64_t parse_uint64( const char *s, char **temp = NULL )
  *
  * @param[in] s - default value if not specified on command line
  *
- * @return bool8_t - TRUE if option was valid.
+ * @return bool - true if option was valid.
  */
-bool8_t Uint64Option::ParseValue( const char *s ) {
+bool Uint64Option::ParseValue( const char *s ) {
     char *temp;
     value = parse_uint64(s,&temp);
-    if (*temp != 0) return FALSE;
+    if (*temp != 0) return false;
     /* printf("%s=%d (%x)\n",name,option_field,option_field); */
-    return TRUE;
+    return true;
 }
 
 /**
@@ -510,15 +510,15 @@ bool8_t Uint64Option::ParseValue( const char *s ) {
  * @param[in] s - command line argument string
  * @param[in] error_message - error message
  *
- * @return bool8_t - true if argument string is valid
+ * @return bool - true if argument string is valid
  */
-bool8_t Uint64Option::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool Uint64Option::ParseValueWithError( const char *s, std::ostream &error_message ) {
     if (ParseValue(s))
-        return TRUE;
+        return true;
     error_message << "error parsing '" << s << "'\n";
     error_message << " for uint64 option '" << name << "'\n";
     error_message << " option description: " << usage_message << "\n";
-    return FALSE;
+    return false;
 }
 
 /**
@@ -552,25 +552,25 @@ my_stricmp (const char *s1, const char *s2)
  *
  * @param[in] s - default value if not specified on command line
  *
- * @return bool8_t - TRUE if option was valid.
+ * @return bool - true if option was valid.
  */
-bool8_t BoolOption::ParseValue( const char *s ) {
+bool BoolOption::ParseValue( const char *s ) {
     if ((my_stricmp(s,"") == 0) ||
         (my_stricmp(s,"1") == 0) ||
         (my_stricmp(s,"on") == 0) ||
         (my_stricmp(s,"yes") == 0) ||
         (my_stricmp(s,"true") == 0)) {
-        value = TRUE;
-        return TRUE;
+        value = true;
+        return true;
     }
     if ((my_stricmp(s,"0") == 0) ||
         (my_stricmp(s,"no") == 0) ||
         (my_stricmp(s,"off") == 0) ||
         (my_stricmp(s,"false") == 0)) {
-        value = FALSE;
-        return TRUE;
+        value = false;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 /**
@@ -580,16 +580,16 @@ bool8_t BoolOption::ParseValue( const char *s ) {
  * @param[in] s - command line argument string
  * @param[in] error_message - error message
  *
- * @return bool8_t - true if argument string is valid
+ * @return bool - true if argument string is valid
  */
-bool8_t BoolOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool BoolOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
     if (ParseValue(s))
-        return TRUE;
+        return true;
     error_message << "error parsing '" << s << "'\n";
     error_message << " for bool option '" << name << "'\n";
     error_message << " option description: " << usage_message << "\n";
     error_message << "valid values are 0,1,no,yes,off,on,false,true\n";
-    return FALSE;
+    return false;
 }
 
 /**
@@ -638,17 +638,17 @@ void EnumOption::AddEnum(uint32_t _value, const char *_str, const char *_usage_m
  * @param[in] s - string to look for
  * @param[out] value - value the corresponds to the specified string
  *
- * @return bool8_t - TRUE if a match was found
+ * @return bool - true if a match was found
  */
-static bool8_t find_enum(std::vector<value_str_t> *enum_list, const char *s, uint32_t *value ) {
+static bool find_enum(std::vector<value_str_t> *enum_list, const char *s, uint32_t *value ) {
     for (std::vector<value_str_t>::const_iterator it = enum_list->begin(); it != enum_list->end(); ++it) {
         value_str_t value_string = *(it);
         if (my_stricmp(value_string.str,s)==0) {
             *value = value_string.value;
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -658,15 +658,15 @@ static bool8_t find_enum(std::vector<value_str_t> *enum_list, const char *s, uin
  *
  * @param[in] s - enumeration to parse
  *
- * @return bool8_t - TRUE if enumeration was valid.
+ * @return bool - true if enumeration was valid.
  */
-bool8_t EnumOption::ParseValue( const char *s ) {
+bool EnumOption::ParseValue( const char *s ) {
     if (find_enum(&enum_list_,s,&value)) {
-        return TRUE;
+        return true;
     }
     char *temp;
     value = parse_int(s,&temp);
-    if (*temp == 0) return TRUE;
+    if (*temp == 0) return true;
     printf("unknown %s \"%s\"\n",name,s);
     printf("valid enumerations are: \n");
     uint32_t max_len = 0;
@@ -681,7 +681,7 @@ bool8_t EnumOption::ParseValue( const char *s ) {
         printf("  %*s 0x%02x %s\n",-max_len,value_string.str,value_string.value,value_string.usage_message);
     }
     exit(-1);
-    return FALSE; // never gets here
+    return false; // never gets here
 }
 
 /**
@@ -691,19 +691,19 @@ bool8_t EnumOption::ParseValue( const char *s ) {
  * @param[in] s - enumeration to parse.
  * @param[out] error_message - std::ostream for error message if value was unable to be parsed
  *
- * @return bool8_t - TRUE if enumeration was valid, FALSE and error message in 'error_message'
+ * @return bool - true if enumeration was valid, false and error message in 'error_message'
  */
-bool8_t EnumOption::ParseValueWithError(const char *s, std::ostream &error_message)
+bool EnumOption::ParseValueWithError(const char *s, std::ostream &error_message)
 {
     if (find_enum(&enum_list_,s,&value))
     {
-        return TRUE;
+        return true;
     }
     char *temp;
     value = parse_int(s,&temp);
     if (*temp == 0)
     {
-        return TRUE;
+        return true;
     }
 
     // save format flags
@@ -730,7 +730,7 @@ bool8_t EnumOption::ParseValueWithError(const char *s, std::ostream &error_messa
             << value_string.usage_message << "\n";
     }
     error_message.flags( f );
-    return FALSE;
+    return false;
 }
 
 
@@ -851,16 +851,16 @@ void EnumPairOption::AddPairEnum(uint32_t _first_value, uint32_t _second_value, 
  *
  * @param[in] s - default value if not specified on command line
  *
- * @return bool8_t - TRUE if option was valid.
+ * @return bool - true if option was valid.
  */
-bool8_t EnumPairOption::ParseValue( const char *s ) {
+bool EnumPairOption::ParseValue( const char *s ) {
     uint32_t max_len;
     for (std::vector<value_pair_str_t>::const_iterator it = pair_enum_list_.begin(); it != pair_enum_list_.end(); ++it) {
         value_pair_str_t value_pair_string = *(it);
         if (my_stricmp(value_pair_string.str,s)==0) {
             first_value = value_pair_string.first_value;
             second_value = value_pair_string.second_value;
-            return TRUE;
+            return true;
         }
     }
 
@@ -883,7 +883,7 @@ bool8_t EnumPairOption::ParseValue( const char *s ) {
                 printf("parsing second value from '%s'\n",dot);
                 second_value = parse_int(dot,&temp);
                 if (*temp == 0) {
-                    return TRUE;
+                    return true;
                 }
             }
         }
@@ -915,7 +915,7 @@ bool8_t EnumPairOption::ParseValue( const char *s ) {
         printf("  %*s  0x%02x.%d %s\n",-max_len,value_pair_string.str,value_pair_string.first_value,value_pair_string.second_value,value_pair_string.usage_message);
     }
     exit(-1);
-    return FALSE; // never gets here
+    return false; // never gets here
 }
 
 /**
@@ -949,33 +949,33 @@ void IntRangeOption::Reset()
  *
  * @param[in] s - default value if not specified on command line
  *
- * @return bool8_t - TRUE if option was valid.
+ * @return bool - true if option was valid.
  */
-bool8_t IntRangeOption::ParseValue( const char *s ) {
+bool IntRangeOption::ParseValue( const char *s ) {
     char *temp;
     start_value = parse_int(s,&temp);
     s = temp;
     if (*s == '+') {
         s++;
         size = parse_int(s,&temp);
-        if (*temp != 0) return FALSE;
+        if (*temp != 0) return false;
 
         end_value = start_value + size;
 
         /* printf("%s=%d (%x)\n",name,option_field,option_field); */
-        return TRUE;
+        return true;
     }
-    if (*s != '.') return FALSE;
+    if (*s != '.') return false;
     s++;
-    if (*s != '.') return FALSE;
+    if (*s != '.') return false;
     s++;
     end_value = parse_int(s,&temp);
-    if (*temp != 0) return FALSE;
+    if (*temp != 0) return false;
 
     size = end_value - start_value;
 
     /* printf("%s=%d (%x)\n",name,option_field,option_field); */
-    return TRUE;
+    return true;
 }
 
 /**
@@ -985,18 +985,18 @@ bool8_t IntRangeOption::ParseValue( const char *s ) {
  * @param[in] s - command line argument string
  * @param[in] error_message - error message
  *
- * @return bool8_t - true if argument string is valid
+ * @return bool - true if argument string is valid
  */
-bool8_t IntRangeOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool IntRangeOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
     if (ParseValue(s))
-        return TRUE;
+        return true;
     error_message << "error parsing '" << s << "'\n";
     error_message << " for IntRange option '" << name << "'\n";
     error_message << " option description: " << usage_message << "\n";
     error_message << "range formats are:\n";
     error_message << "   start..end e.g. 0xd00380..0xd00388\n";
     error_message << "   start+count e.g. 0xd00380+2 (that's 0xd00380,0xd00384)\n";
-    return FALSE;
+    return false;
 }
 
 /**
@@ -1008,7 +1008,7 @@ bool8_t IntRangeOption::ParseValueWithError( const char *s, std::ostream &error_
  * @param[in] _default_step - default step size for ranges (e.g. integer lists that are register addresses use a default step of 4)
  */
 IntListOption::IntListOption( const char *_name, const char *_usage_message, uint32_t _default_step ) : CmdLineOption(_name, _usage_message) {
-    this->is_list = TRUE;
+    this->is_list = true;
     this->default_step = _default_step;
     this->mask = 0;
     SetFromEnvironmentVariable();
@@ -1037,9 +1037,9 @@ void IntListOption::Reset() {
  *
  * @param[in] s - default value if not specified on command line
  *
- * @return bool8_t - TRUE if option was valid.
+ * @return bool - true if option was valid.
  */
-bool8_t IntListOption::ParseValue( const char *s ) {
+bool IntListOption::ParseValue( const char *s ) {
     char *temp;
     int32_t value;
     value = parse_int(s,&temp);
@@ -1047,7 +1047,7 @@ bool8_t IntListOption::ParseValue( const char *s ) {
         value_list_.push_back(value);
         mask |= 1<<value;
         string_list_.push_back(s);
-        return TRUE;
+        return true;
     }
     int32_t start_value = value;
     int32_t end_value;
@@ -1063,7 +1063,7 @@ bool8_t IntListOption::ParseValue( const char *s ) {
             s++;
             step = parse_int(s,&temp);
         }
-        if (*temp != 0) return FALSE;
+        if (*temp != 0) return false;
 
         end_value = start_value + size * step;
 
@@ -1074,14 +1074,14 @@ bool8_t IntListOption::ParseValue( const char *s ) {
 
         string_list_.push_back(s);
         /* printf("%s=%d (%x)\n",name,option_field,option_field); */
-        return TRUE;
+        return true;
     }
-    if (*s != '.') return FALSE;
+    if (*s != '.') return false;
     s++;
-    if (*s != '.') return FALSE;
+    if (*s != '.') return false;
     s++;
     end_value = parse_int(s,&temp);
-    if (*temp != 0) return FALSE;
+    if (*temp != 0) return false;
 
     size = end_value - start_value;
     for (i=start_value;i<=end_value;i+=default_step) {
@@ -1091,7 +1091,7 @@ bool8_t IntListOption::ParseValue( const char *s ) {
 
     string_list_.push_back(s);
     /* printf("%s=%d (%x)\n",name,option_field,option_field); */
-    return TRUE;
+    return true;
 }
 
 /**
@@ -1101,11 +1101,11 @@ bool8_t IntListOption::ParseValue( const char *s ) {
  * @param[in] s - command line argument string
  * @param[in] error_message - error message
  *
- * @return bool8_t - true if argument string is valid
+ * @return bool - true if argument string is valid
  */
-bool8_t IntListOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool IntListOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
     if (ParseValue(s))
-        return TRUE;
+        return true;
     error_message << "error parsing '" << s << "'\n";
     error_message << " for IntList option '" << name << "'\n";
     error_message << " option description: " << usage_message << "\n";
@@ -1122,7 +1122,7 @@ bool8_t IntListOption::ParseValueWithError( const char *s, std::ostream &error_m
         error_message << "   start+count e.g. " << name << "=5+2 (that's 5,6)\n";
         error_message << "   start+count/skip e.g. " << name << "=11+3/100 (that's 11,111,211) \n";
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -1146,7 +1146,7 @@ void IntListOption::AddValue( const int32_t value ) {
  * @param[in] _usage_message - option usage message
  */
 OptionFreeStringListOption::OptionFreeStringListOption( const char *_name, const char *_usage_message ) : StringListOption(_name, _usage_message) {
-    this->is_option_free_list = TRUE;
+    this->is_option_free_list = true;
     SetFromEnvironmentVariable();
 }
 
@@ -1158,7 +1158,7 @@ OptionFreeStringListOption::OptionFreeStringListOption( const char *_name, const
  * @param[in] _usage_message - option usage message
  */
 StringListOption::StringListOption( const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message) {
-    this->is_list = TRUE;
+    this->is_list = true;
     SetFromEnvironmentVariable();
 }
 
@@ -1184,11 +1184,11 @@ void StringListOption::Reset() {
  *
  * @param[in] s - default value if not specified on command line
  *
- * @return bool8_t - TRUE if option was valid.
+ * @return bool - true if option was valid.
  */
-bool8_t StringListOption::ParseValue( const char *s ) {
+bool StringListOption::ParseValue( const char *s ) {
     string_list_.push_back(s);
-    return TRUE;
+    return true;
 }
 
 /**
@@ -1219,9 +1219,9 @@ void DoubleOption::Reset()
  *
  * @param[in] s - default value if not specified on command line
  *
- * @return bool8_t - TRUE if option was valid.
+ * @return bool - true if option was valid.
  */
-bool8_t DoubleOption::ParseValue( const char *s ) {
+bool DoubleOption::ParseValue( const char *s ) {
     char *temp = NULL;
     value = strtod(s,&temp);
     if (*temp == '/') {
@@ -1233,9 +1233,9 @@ bool8_t DoubleOption::ParseValue( const char *s ) {
     }
 
     if (*temp != 0) {
-        return FALSE;
+        return false;
     } else {
-        return TRUE;
+        return true;
     }
 }
 
@@ -1246,17 +1246,17 @@ bool8_t DoubleOption::ParseValue( const char *s ) {
  * @param[in] s - command line argument string
  * @param[in] error_message - error message
  *
- * @return bool8_t - true if argument string is valid
+ * @return bool - true if argument string is valid
  */
-bool8_t DoubleOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool DoubleOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
     if (ParseValue(s))
-        return TRUE;
+        return true;
     error_message << "error parsing '" << s << "'\n";
     error_message << " for Double option '" << name << "'\n";
     error_message << " option description: " << usage_message << "\n";
     error_message << "double is parsed with strtod, or numerator/denominator\n";
     error_message << "   " << name << "=" << "11/20\n";
-    return FALSE;
+    return false;
 }
 
 /**
@@ -1287,11 +1287,11 @@ void StringOption::Reset()
  *
  * @param[in] s - default value if not specified on command line
  *
- * @return bool8_t - TRUE if option was valid.
+ * @return bool - true if option was valid.
  */
-bool8_t StringOption::ParseValue( const char *s ) {
+bool StringOption::ParseValue( const char *s ) {
     value = s;
-    return TRUE;
+    return true;
 }
 
 /**
@@ -1406,7 +1406,7 @@ void CmdLineOptions::ParseString(const char *argv_string)
 * @param[in] s - string
 * @return true if 's' matches a command line option, false otherwise.
 */
-bool8_t CmdLineOptions::MatchesAnOption( const char *s )
+bool CmdLineOptions::MatchesAnOption( const char *s )
 {
     char token[100];
     char *equals;
@@ -1426,7 +1426,7 @@ bool8_t CmdLineOptions::MatchesAnOption( const char *s )
     for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
         CmdLineOption *option = *(it);
         if (strcmp(token,option->name) == 0) {
-            return TRUE;
+            return true;
         }
     }
     return false;
@@ -1490,7 +1490,7 @@ void CmdLineOptions::ParseOptions( int argc, const char **argv ) {
             equals++;
             val_str = &s[equals-token];
         }
-        bool8_t matched = FALSE;
+        bool matched = false;
         for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
             CmdLineOption *option = *(it);
             if (strcmp(token,option->name) == 0) {
@@ -1520,8 +1520,8 @@ void CmdLineOptions::ParseOptions( int argc, const char **argv ) {
                     }
                 }
                 option->OptionSet();
-                option->is_set = TRUE;
-                matched = TRUE;
+                option->is_set = true;
+                matched = true;
             }
         }
         if (!matched) {
@@ -1561,7 +1561,7 @@ void CmdLineOption::SetFromEnvironmentVariable()
             CmdLineOptions::GetInstance()->Usage();
         }
         OptionSet();
-        is_set = TRUE;
+        is_set = true;
     }
 }
 
@@ -1584,9 +1584,9 @@ void CmdLineOptions::AddOption(CmdLineOption *option)
 * @param[in] argv - argument strings
 * @param[in] error_message - error message
 *
-* @return TRUE if successful, FALSE otherwise.
+* @return true if successful, false otherwise.
 */
-bool8_t CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostream &error_message ) 
+bool CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostream &error_message ) 
 {
     for (int i = 0;i<argc;i++) {
         const char *s = argv[i];
@@ -1610,7 +1610,7 @@ bool8_t CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::o
             equals++;
             val_str = &s[equals-token];
         }
-        bool8_t matched = FALSE;
+        bool matched = false;
         for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
             CmdLineOption *option = *(it);
             if (strcmp(token,option->name) == 0) {
@@ -1626,21 +1626,21 @@ bool8_t CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::o
                 } else {
                     if (!option->ParseValueWithError(val_str,error_message)) {
                         error_message << "error parsing \"" << argv[i] << "\"" << "\n";
-                        return FALSE;
+                        return false;
                     }
                 }
                 option->OptionSet();
-                option->is_set = TRUE;
-                matched = TRUE;
+                option->is_set = true;
+                matched = true;
             }
         }
         if (!matched) {
             error_message << "no match for option \"" << token << "\"" << "\n";
             ShowUsage(error_message);
-            return FALSE;
+            return false;
         }
     }
-    return TRUE;
+    return true;
 }
 
 CmdLineOptions::~CmdLineOptions()
