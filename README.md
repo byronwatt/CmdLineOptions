@@ -5,6 +5,10 @@ This command line parser lets you scatter options throughout your code base, and
 
 Just like how googletest doesn't need to know about all the GTEST() macros to run those tests, this command line parser doesn't need to know about all the command line options exposed in your code.
 
+## build status
+
+![build/test status](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml/badge.svg)
+
 ## Notes from the author 
 
 At Microchip, we have hundreds of standalone test programs for different features of our products, and we have a lot of common options that can be used to help with investigating and auditing execution.  
@@ -136,6 +140,3 @@ The `LogLevelOption` class shows an example of overriding EnumOption and definin
 
 This might not help much since typically you would parse command line options before you've initialized various libraries.  But occassionally it's useful.
 
-## build status
-
-![build/test status](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml/badge.svg)
