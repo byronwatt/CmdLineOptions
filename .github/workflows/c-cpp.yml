@@ -23,6 +23,6 @@ jobs:
     - name: Build
       run: meson compile -C build
     - name: Install bats
-      run: apt-get install bats
+      run: sudo apt-get install bats
     - name: Test
       run: bats tests/test.bats
