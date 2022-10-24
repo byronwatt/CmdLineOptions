@@ -8,6 +8,7 @@
 
 #include <ostream>
 #include <vector>
+#include <stdint.h>
 
 extern "C" void cmd_line_options_parse_options( int argc, const char **argv );
 
@@ -29,18 +30,18 @@ public:
     CmdLineOption(const char *_name, const char *_usage_message);
     virtual ~CmdLineOption() {};
     /// pure virtual function
-    virtual bool8_t ParseValue( const char *s ) = 0;
-    virtual bool8_t ParseValueWithError(const char *s, std::ostream &error_message);
+    virtual bool ParseValue( const char *s ) = 0;
+    virtual bool ParseValueWithError(const char *s, std::ostream &error_message);
     void SetFromEnvironmentVariable();
     virtual void EndOfList();
     virtual void Reset();
     virtual void OptionSet();
     const char *name; ///< name of the option
     const char *usage_message; ///< usage message for the option
-    bool8_t is_set; ///< was the option set on the command line
-    bool8_t is_list; ///< does the option take a list of parameters.
-    bool8_t is_option_free_list; ///< should the list terminate if a token looks like a command line option.
-    bool8_t is_bool; ///< is this option a 'bool' option which does not need an '='
+    bool is_set; ///< was the option set on the command line
+    bool is_list; ///< does the option take a list of parameters.
+    bool is_option_free_list; ///< should the list terminate if a token looks like a command line option.
+    bool is_bool; ///< is this option a 'bool' option which does not need an '='
 };
 
 /**
@@ -49,12 +50,12 @@ public:
  */
 class BoolOption: public CmdLineOption {
 public:
-    BoolOption( bool8_t default_value, const char *_name, const char *_usage_message ) ;
-    virtual bool8_t ParseValue( const char *s );
-    virtual bool8_t ParseValueWithError(const char *s, std::ostream &error_message);
+    BoolOption( bool default_value, const char *_name, const char *_usage_message ) ;
+    virtual bool ParseValue( const char *s );
+    virtual bool ParseValueWithError(const char *s, std::ostream &error_message);
     virtual void Reset();
-    bool8_t value; ///< boolean value
-    bool8_t _default_value; ///< boolean value
+    bool value; ///< boolean value
+    bool _default_value; ///< boolean value
 } ;
 
 /**
@@ -63,7 +64,7 @@ public:
  */
 class AliasOption: public CmdLineOption {
 public:
-    virtual bool8_t ParseValue(const char *s);
+    virtual bool ParseValue(const char *s);
     AliasOption(const char *_name,const char *_usage_message);
     std::vector<const char *> alias_argv; ///< equivalent list of parameters for this alias
 };
@@ -85,8 +86,8 @@ typedef struct {
 class EnumOption: public CmdLineOption {
 public:
     EnumOption( uint32_t default_value, const char *_name, const char *_usage_message ) ;
-    virtual bool8_t ParseValue( const char *s );
-    virtual bool8_t ParseValueWithError(const char *s, std::ostream &error_message);
+    virtual bool ParseValue( const char *s );
+    virtual bool ParseValueWithError(const char *s, std::ostream &error_message);
     const char *GetString( uint32_t value );
     void AddEnum(uint32_t value, const char *str, const char *usage_message="");
     virtual void Reset();
@@ -114,7 +115,7 @@ typedef struct {
 class EnumPairOption: public CmdLineOption {
 public:
     EnumPairOption( const char *_name, const char *_usage_message ) ;
-    virtual bool8_t ParseValue( const char *s );
+    virtual bool ParseValue( const char *s );
     virtual void Reset();
     void AddFirstEnum(uint32_t value, const char *str, const char *usage_message="");
     void AddPairEnum(uint32_t first_value, uint32_t second_value, const char *str, const char *usage_message="");
@@ -142,8 +143,8 @@ public:
 class IntOption: public CmdLineOption {
 public:
     IntOption( int32_t default_value, const char *_name, const char *_usage_message ) ;
-    virtual bool8_t ParseValue( const char *s );
-    virtual bool8_t ParseValueWithError(const char *s, std::ostream &error_message);
+    virtual bool ParseValue( const char *s );
+    virtual bool ParseValueWithError(const char *s, std::ostream &error_message);
     virtual void Reset();
     int32_t value; ///< signed integer value
     int32_t _default_value; ///< signed integer value
@@ -156,8 +157,8 @@ public:
 class UintOption: public CmdLineOption {
 public:
     UintOption( uint32_t default_value, const char *_name, const char *_usage_message ) ;
-    virtual bool8_t ParseValue( const char *s );
-    virtual bool8_t ParseValueWithError(const char *s, std::ostream &error_message);
+    virtual bool ParseValue( const char *s );
+    virtual bool ParseValueWithError(const char *s, std::ostream &error_message);
     virtual void Reset();
     uint32_t value; ///< unsigned integer value
     uint32_t _default_value; ///< unsigned integer value
@@ -170,8 +171,8 @@ public:
 class Int64Option: public CmdLineOption {
 public:
     Int64Option( int64_t default_value, const char *_name, const char *_usage_message ) ;
-    virtual bool8_t ParseValue( const char *s );
-    virtual bool8_t ParseValueWithError(const char *s, std::ostream &error_message);
+    virtual bool ParseValue( const char *s );
+    virtual bool ParseValueWithError(const char *s, std::ostream &error_message);
     virtual void Reset();
     int64_t value; ///< signed 64 bit integer value
     int64_t _default_value; ///< signed 64 bit integer value
@@ -184,8 +185,8 @@ public:
 class Uint64Option: public CmdLineOption {
 public:
     Uint64Option( uint64_t default_value, const char *_name, const char *_usage_message ) ;
-    virtual bool8_t ParseValue( const char *s );
-    virtual bool8_t ParseValueWithError(const char *s, std::ostream &error_message);
+    virtual bool ParseValue( const char *s );
+    virtual bool ParseValueWithError(const char *s, std::ostream &error_message);
     virtual void Reset();
     uint64_t value; ///< unsigned 64 bit integer value
     uint64_t _default_value; ///< unsigned 64 bit integer value
@@ -198,8 +199,8 @@ public:
 class IntRangeOption: public CmdLineOption {
 public:
     IntRangeOption( const char *_name, const char *_usage_message ) ;
-    virtual bool8_t ParseValue( const char *s );
-    virtual bool8_t ParseValueWithError(const char *s, std::ostream &error_message);
+    virtual bool ParseValue( const char *s );
+    virtual bool ParseValueWithError(const char *s, std::ostream &error_message);
     virtual void Reset();
     int32_t start_value; ///< start of a range
     int32_t end_value; ///< end of a range
@@ -213,8 +214,8 @@ public:
 class IntListOption: public CmdLineOption {
 public:
     IntListOption( const char *_name, const char *_usage_message, uint32_t _default_step=4 ) ;
-    virtual bool8_t ParseValue( const char *s );
-    virtual bool8_t ParseValueWithError(const char *s, std::ostream &error_message);
+    virtual bool ParseValue( const char *s );
+    virtual bool ParseValueWithError(const char *s, std::ostream &error_message);
     virtual void AddValue( int32_t value );
     virtual void Reset();
     virtual void EndOfList();
@@ -231,7 +232,7 @@ public:
 class StringListOption: public CmdLineOption {
 public:
     StringListOption( const char *_name, const char *_usage_message ) ;
-    virtual bool8_t ParseValue( const char *s );
+    virtual bool ParseValue( const char *s );
     virtual void Reset();
     virtual void EndOfList();
     std::vector<const char *> string_list_; ///< list of strings
@@ -264,8 +265,8 @@ public:
 class DoubleOption: public CmdLineOption {
 public:
     DoubleOption( double default_value, const char *_name, const char *_usage_message );
-    virtual bool8_t ParseValue( const char *s );
-    virtual bool8_t ParseValueWithError(const char *s, std::ostream &error_message);
+    virtual bool ParseValue( const char *s );
+    virtual bool ParseValueWithError(const char *s, std::ostream &error_message);
     virtual void Reset();
     double value; ///< double command line value
     double _default_value; ///< double command line value
@@ -278,7 +279,7 @@ public:
 class StringOption: public CmdLineOption {
 public:
     StringOption( const char *default_value, const char *_name, const char *_usage_message );
-    virtual bool8_t ParseValue( const char *s );
+    virtual bool ParseValue( const char *s );
     virtual void Reset();
     const char * value; ///< string command line option
     const char * _default_value; ///< string command line option
@@ -291,7 +292,7 @@ public:
 class AddrMaskOption: public CmdLineOption {
 public:
     AddrMaskOption( const char *_name, const char *_usage_message ) ;
-    virtual bool8_t ParseValue( const char *s );
+    virtual bool ParseValue( const char *s );
     virtual void Reset();
     addr_and_mask_t addr_and_mask; ///< address and mask
 } ;
@@ -303,8 +304,8 @@ public:
 class OptionGroup: public CmdLineOption {
 public:
     /// not a real command line option
-    virtual bool8_t ParseValue(const char *s) {
-        return FALSE;
+    virtual bool ParseValue(const char *s) {
+        return false;
     }
     /// constructor
     OptionGroup(const char *_usage_message) : CmdLineOption("",_usage_message) {
@@ -326,9 +327,9 @@ public:
     void ShowUsage(std::ostream &error_message);
     void Reset();
     void ParseOptions( int argc, const char **argv );
-    bool8_t ParseOptionsOrError( int argc, const char **argv, std::ostream &error_message );
+    bool ParseOptionsOrError( int argc, const char **argv, std::ostream &error_message );
     void ParseString(const char *argv_string);
-    bool8_t MatchesAnOption( const char *s );
+    bool MatchesAnOption( const char *s );
 
     std::vector<const char*> tokens_allocated_by_ParseString; ///< extra strings created by ParseString
     std::vector<CmdLineOption*> option_list_; ///< list of valid command line options
