@@ -18,6 +18,8 @@ jobs:
     - name: Install meson/ninja
       run: pip3 install meson ninja
     - uses: actions/checkout@v3
+      with:
+        submodules: recursive
     - name: Configure
       run: meson setup build
     - name: Build
