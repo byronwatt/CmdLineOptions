@@ -25,4 +25,4 @@ jobs:
     - name: Install bats
       run: sudo apt-get install bats
     - name: Test
-      run: bats test/test.bats
+      run: bats test/test*.bats

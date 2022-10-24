@@ -1,19 +1,22 @@
 #!/usr/bin/env bats
 
-# fixtures bats
+load "libs/bats-support/load"
+load "libs/bats-assert/load"
 
 
 @test "no arguments no output" {
   echo "running build/example"
   run build/example
   [ $status -eq 0 ]
-  # [ $result -eq "" ]
+  assert_output --stdin <<END
+END
 }
 
 
-
-local expected_result
-expected_result=$(cat <<END
+@test "bad arguments displays help message" {
+  run build/example asdf
+  [ $status -eq 255 ]
+  assert_output --stdin <<END
 no match for 'asdf'
   log_level        - set SW APPLIB logging level (0=DEBUG,1=INFO,2=WARNING,3=ERROR,4=CRITICAL)
   some_bool        - testing bool option
@@ -29,28 +32,4 @@ no match for 'asdf'
   some_double      - testing some_double
   some_string      - testing some_string
 END
-)
-
-@test "bad arguments displays help message" {
-  echo "running build/example asdf"
-  echo "and hoping output is:"
-  echo $expected_result
-  run build/example asdf
-  [ $status -eq 255 ]
-  [ $result -eq $expected_result ]
-}
-
-expected_result=$(cat <<END
-option_some_uint.is_set
-option_some_uint.value = 2271560481 (0x87654321)
-END
-)
-
-@test "uint" {
-  echo "running build/example asdf"
-  echo "and hoping output is:"
-  echo $expected_result
-  run build/example some_uint=0x87654321
-  [ $status -eq 0 ]
-  [ $result -eq $expected_result ]
 }
