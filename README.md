@@ -135,3 +135,7 @@ If you need to call a function in addition to setting a variable, then you can c
 The `LogLevelOption` class shows an example of overriding EnumOption and defining a `LogLevelOption::OptionSet()` method for whenever the log_level option is changed.
 
 This might not help much since typically you would parse command line options before you've initialized various libraries.  But occassionally it's useful.
+
+## build status
+
+![build/test status](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml/badge.svg)
