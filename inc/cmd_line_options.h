@@ -213,7 +213,7 @@ public:
 */
 class IntListOption: public CmdLineOption {
 public:
-    IntListOption( const char *_name, const char *_usage_message, uint32_t _default_step=4 ) ;
+    IntListOption( const char *_name, const char *_usage_message, uint32_t _default_step=1 ) ;
     virtual bool ParseValue( const char *s );
     virtual bool ParseValueWithError(const char *s, std::ostream &error_message);
     virtual void AddValue( int32_t value );

@@ -8,11 +8,11 @@ static AliasOption option_some_alias("some_alias","some_bool=true some_enum=two 
 class SomeEnumOption: public EnumOption {
 public:
     SomeEnumOption( uint32_t default_value, const char *_name, const char *_usage_message ) : EnumOption(default_value,_name,_usage_message) {
-        AddEnum(0,"zero");
-        AddEnum(1,"one");
-        AddEnum(2,"two");
-        AddEnum(3,"three");
-        AddEnum(4,"four");
+        AddEnum(0,"zero","often enums are used to select which test to run");
+        AddEnum(1,"one","and you have blurbs for what the tests do");
+        AddEnum(2,"two","you get the idea");
+        AddEnum(3,"three","each enum");
+        AddEnum(4,"four","has a usage message");
         SetFromEnvironmentVariable();
     }
 } ;
@@ -67,7 +67,7 @@ void option_test()
     if (option_some_uint.is_set)
     {
         printf("option_some_uint.is_set\n");
-        printf("option_some_uint.value = %u (%x)\n",option_some_uint.value,option_some_uint.value);
+        printf("option_some_uint.value = %u (0x%x)\n",option_some_uint.value,option_some_uint.value);
     }
     if (option_some_int64.is_set)
     {
@@ -87,7 +87,11 @@ void option_test()
     if (option_some_intList.is_set)
     {
         printf("option_some_intList.is_set\n");
-        //printf("option_some_intList.value = \n",option_some_intList.value);
+        printf("option_some_intList:");
+        for (std::vector<int32_t>::const_iterator it = option_some_intList.value_list_.begin(); it != option_some_intList.value_list_.end(); ++it) {
+            printf(" %d",*it);
+        }
+        printf("\n");
     }
     if (option_some_stringlist.is_set)
     {

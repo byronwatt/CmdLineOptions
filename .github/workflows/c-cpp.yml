@@ -1,0 +1,30 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/setup-python@v1
+      with:
+            python-version: '3.x'
+    - name: Install meson/ninja
+      run: pip3 install meson ninja
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Configure
+      run: meson setup build
+    - name: Build
+      run: meson compile -C build
+    - name: Install bats
+      run: sudo apt-get install bats
+    - name: Test
+      run: bats test/test*.bats
