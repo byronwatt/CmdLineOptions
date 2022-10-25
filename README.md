@@ -5,6 +5,10 @@ This command line parser lets you scatter options throughout your code base, and
 
 Just like how googletest doesn't need to know about all the GTEST() macros to run those tests, this command line parser doesn't need to know about all the command line options exposed in your code.
 
+## build status
+
+![build/test status](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml/badge.svg)
+
 ## Notes from the author 
 
 At Microchip, we have hundreds of standalone test programs for different features of our products, and we have a lot of common options that can be used to help with investigating and auditing execution.  
@@ -43,7 +47,7 @@ This all happens before `main()` is called.
 
 ## Confessions from the author
 
-### Positional arguments
+### Positional arguments and list arguments
 
 The parser doesn't handle positional arguments, we just didn't need it to handle positional arguments for our purposes.
 
@@ -79,25 +83,34 @@ But there's no way to have single character options,... maybe that's just my per
 
 ### Enumerations
 
-enumerations are a little clunky,
+enumerations are a little clunky, you have to extend the EnumOption class and provide a list of string -> value pairs in the constructor.
 
-You have to provide the list of string -> value matches in the constructor:
+But having enumerated options is really nice for the user,... maybe someone can come up with a better technique?
 
 ```c++
-static option_log_level EnumOption(1, "log_level", "set SW APPLIB logging level (0=DEBUG,1=INFO,2=WARNING,3=ERROR,4=CRITICAL)") {
-    AddEnum(0,"DEBUG");
-    AddEnum(1,"INFO");
-    AddEnum(2,"WARNING");
-    AddEnum(3,"ERROR");
-    AddEnum(4,"CRITICAL");
-}
+typedef enum {
+    TEST_ALL,
+    TEST_SMOKE_TEST,
+    TEST_ENDURANCE_TEST,
+} TestSelection;
+
+class TestSelectionOption: public EnumOption {
+public:
+    TestSelectionOption( uint32_t default_value, const char *_name, const char *_usage_message ) : EnumOption(default_value,_name,_usage_message) {
+        AddEnum(0,"all","run all tests");
+        AddEnum(1,"smoke_test","just a quick smoke test");
+        AddEnum(2,"endurance_test","longer test");
+        SetFromEnvironmentVariable();
+    }
+} ;
+TestSelectionOption option_test_selection("test",0,"test to run" );
 ```
 
-then you can use a command line option like:
+Then you can use a command line option like:
 ```
-log_level=DEBUG
+test=smoke_test
 ```
-If you try to set it to an invalid enumeration it displays a help message with the valid enumerations.
+If you try to set it to an invalid enumeration it displays a help message with the valid enumerations and their help message.
 
 
 ### Environment variables
@@ -134,4 +147,4 @@ If you need to call a function in addition to setting a variable, then you can c
 
 The `LogLevelOption` class shows an example of overriding EnumOption and defining a `LogLevelOption::OptionSet()` method for whenever the log_level option is changed.
 
-This might not help much since typically you would parse command line options before you've initialized various libraries.  But occassionally it's useful.
+This might not help much since typically you would parse command line options before you've initialized various libraries.  But occasionally it's useful.
