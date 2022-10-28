@@ -33,4 +33,5 @@ jobs:
       with:
         gcov: true
         token: ${{ secrets.CODECOV_TOKEN }}
-
+        fixes:
+          - "[.][.]/::"
