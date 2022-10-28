@@ -21,10 +21,14 @@ jobs:
       with:
         submodules: recursive
     - name: Configure
-      run: meson setup build
+      run: meson setup build -Db_coverage=true
     - name: Build
       run: meson compile -C build
     - name: Install bats
       run: sudo apt-get install bats
     - name: Test
       run: bats test/test*.bats
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        gcov: true
