@@ -1301,12 +1301,12 @@ bool StringOption::ParseValue( const char *s ) {
 void CmdLineOptions::Usage()
  {
     uint32_t max_len = 0;
-    for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
+    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
         CmdLineOption *option = *(it);
         uint32_t len = strlen(option->name);
         if (len > max_len) max_len = len;
     }
-    for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
+    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
         CmdLineOption *option = *(it);
         if (*option->name == 0) {
             printf("%s\n",option->usage_message);
@@ -1329,12 +1329,12 @@ void CmdLineOptions::ShowUsage(std::ostream &error_message)
 {
     std::ios_base::fmtflags f( error_message.flags() );
     uint32_t max_len = 0;
-    for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
+    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
         CmdLineOption *option = *(it);
         uint32_t len = strlen(option->name);
         if (len > max_len) max_len = len;
     }
-    for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
+    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
         CmdLineOption *option = *(it);
         if (*option->name == 0) {
             error_message << option->usage_message << "\n";
@@ -1354,16 +1354,16 @@ void CmdLineOptions::ShowUsage(std::ostream &error_message)
 */
 void CmdLineOptions::Reset()
  {
-    for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
+    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
         CmdLineOption *option = *(it);
         option->Reset();
     }
     std::vector<const char *>::const_iterator it;
-    for (it = tokens_allocated_by_ParseString.begin(); it != tokens_allocated_by_ParseString.end(); ++it) {
+    for (it = _tokens_allocated_by_ParseString.begin(); it != _tokens_allocated_by_ParseString.end(); ++it) {
         const char *arg = *it;
         free((void *)arg);
     }
-    tokens_allocated_by_ParseString.clear();
+    _tokens_allocated_by_ParseString.clear();
 }
 
 /**
@@ -1387,7 +1387,7 @@ void CmdLineOptions::ParseString(const char *argv_string)
     while( token != NULL )
     {
         char *arg = strdup(token);
-        tokens_allocated_by_ParseString.push_back(arg); /* note: this is not used,... just saved to avoid valgrind from detecting a memory leak */
+        _tokens_allocated_by_ParseString.push_back(arg); /* note: this is not used,... just saved to avoid valgrind from detecting a memory leak */
         argv_vector.push_back((char *)arg);
 
         token = strtok(NULL, " ");
@@ -1423,7 +1423,7 @@ bool CmdLineOptions::MatchesAnOption( const char *s )
     if (equals != NULL) {
         *equals=0;
     }
-    for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
+    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
         CmdLineOption *option = *(it);
         if (strcmp(token,option->name) == 0) {
             return true;
@@ -1491,7 +1491,7 @@ void CmdLineOptions::ParseOptions( int argc, const char **argv ) {
             val_str = &s[equals-token];
         }
         bool matched = false;
-        for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
+        for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
             CmdLineOption *option = *(it);
             if (strcmp(token,option->name) == 0) {
                 if (option->is_list) {
@@ -1573,7 +1573,7 @@ void CmdLineOption::SetFromEnvironmentVariable()
 */
 void CmdLineOptions::AddOption(CmdLineOption *option)
 {
-    option_list_.push_back(option);
+    _option_list.push_back(option);
 }
 
 /**
@@ -1611,7 +1611,7 @@ bool CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostr
             val_str = &s[equals-token];
         }
         bool matched = false;
-        for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
+        for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
             CmdLineOption *option = *(it);
             if (strcmp(token,option->name) == 0) {
                 if (option->is_list) {
@@ -1646,11 +1646,11 @@ bool CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostr
 CmdLineOptions::~CmdLineOptions()
 {
     std::vector<const char *>::const_iterator it;
-    for (it = tokens_allocated_by_ParseString.begin(); it != tokens_allocated_by_ParseString.end(); ++it) {
+    for (it = _tokens_allocated_by_ParseString.begin(); it != _tokens_allocated_by_ParseString.end(); ++it) {
         const char *arg = *it;
         free((void *)arg);
     }
-    tokens_allocated_by_ParseString.clear();
+    _tokens_allocated_by_ParseString.clear();
 }
 
 /* global options */
