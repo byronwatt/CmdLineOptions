@@ -8,6 +8,7 @@ Just like how googletest doesn't need to know about all the GTEST() macros to ru
 ## build status
 
 ![build/test status](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml/badge.svg)
+[![Codecov](https://codecov.io/gh/byronwatt/CmdLineOptions/coverage.svg?branch=main)](https://codecov.io/gh/byronwatt/CmdLineOptions/branch/main)
 
 ## Notes from the author 
 

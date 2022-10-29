@@ -3,7 +3,7 @@
 
 static BoolOption option_some_Bool(false,"some_bool","testing bool option");
 
-static AliasOption option_some_alias("some_alias","some_bool=true some_enum=two some_int=3 some_double=4");
+static AliasOption option_some_alias("some_alias","some_bool=%0 some_alias=%0 some_enum=%0 some_int=%0 some_uint=%0 some_int64=%0 some_uint64=%0 some_intrange=%0 some_intList=: %0 %0 some_stringlist: %0 %0 some_double=%0 some_string=%0");
 
 class SomeEnumOption: public EnumOption {
 public:
