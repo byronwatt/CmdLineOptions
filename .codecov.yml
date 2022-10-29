@@ -4,12 +4,6 @@
 # Can be validated via instructions at:
 # https://docs.codecov.io/docs/codecov-yaml#validate-your-repository-yaml
 
-# Tell Codecov not to send a coverage notification until (at least) 2 builds are completed
-# Since we run Unit & Integration tests in parallel, this lets Codecov know that coverage
-# needs to be merged across those builds
-codecov:
-  notify:
-    after_n_builds: 2
 
 # Settings related to code coverage analysis
 coverage:
@@ -32,7 +26,12 @@ coverage:
 # comment on each PR. See https://docs.codecov.io/docs/pull-request-comments
 # However, this same info is available from the Codecov checks in the PR's
 # "Checks" tab in GitHub. So, the comment is unnecessary.
-comment: true
+comment:                  # this is a top-level key
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: false  # if true: only post the comment if coverage changes
+  require_base: no        # [yes :: must have a base report to post]
+  require_head: no        # [yes :: must have a head report to post]
 
 fixes:
   - "[.][.]/::"

@@ -23,11 +23,14 @@ option_some_double.value = -0.0012345
 END
 }
 
+
 @test "double with a fraction" {
+  echo "note: setting to a fraction also display an explanatory message so that the magic isn't unexpected"
   run build/example some_double=5/16
   [ $status -eq 0 ]
   
   assert_output --stdin <<END
+setting some_double to 5/16 = 0.3125
 option_some_double.is_set
 option_some_double.value = 0.3125
 END
@@ -40,6 +43,8 @@ END
 }
 
 @test "double from environment variable" {
+  echo "note: setting to an environment variable also displays an expository message."
+  echo "environmental side effects could be hard to debug, so need to advertise it somehow."
   export PROJECT_NAME_some_double=123
   run build/example
   [ $status -eq 0 ]
