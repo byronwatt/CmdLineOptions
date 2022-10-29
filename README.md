@@ -39,7 +39,7 @@ static BoolOption option_parse_debug( "parse_debug", false, "enable lots of debu
 
 In `main.cpp` you just call:
 ```c++
-CmdLineOptions::InstanceGet()->ParseOptions( argc, argv );
+CmdLineOptions::ParseOptions( argc, argv );
 ```
 And this 'magically' updates all those variables in those other `.cpp` files that it knew nothing about, and generates a help message if an invalid option is specified.
 
