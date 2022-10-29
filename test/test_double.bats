@@ -13,6 +13,26 @@ option_some_double.value = 0.0012345
 END
 }
 
+@test "double with a negative value" {
+  run build/example some_double=-0.0012345
+  [ $status -eq 0 ]
+  
+  assert_output --stdin <<END
+option_some_double.is_set
+option_some_double.value = -0.0012345
+END
+}
+
+@test "double with a fraction" {
+  run build/example some_double=5/16
+  [ $status -eq 0 ]
+  
+  assert_output --stdin <<END
+option_some_double.is_set
+option_some_double.value = 0.3125
+END
+}
+
 @test "bad double" {
   run build/example some_double=0.123f
   [ $status -eq 255 ]
