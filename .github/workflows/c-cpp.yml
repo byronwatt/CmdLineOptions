@@ -31,7 +31,7 @@ jobs:
     - name: Install bats
       run: sudo apt-get install bats
     - name: Test
-      run: bats test/test*.bats
+      run: bats test/test*.bats test/test_as_string/*.bat test/test_with_error_message/*.bat
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
