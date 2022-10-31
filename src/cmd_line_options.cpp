@@ -137,90 +137,6 @@ static std::string ReplaceString(std::string subject, const std::string& search,
  * @brief
  *   constructor
  *
- * @param[in] _name - option name
- * @param[in] _usage_message - option usage message
- */
-AliasOption::AliasOption( const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message) {
-    SetFromEnvironmentVariable();
-}
-
-/**
- * @brief
- *   Parse a command line option
- *
- * @param[in] s - command line argument string
- *
- * @return bool - true if argument string is valid
- */
-bool AliasOption::ParseValue( const char *s ) {
-    char *token;
-    char *argv_str = strdup(usage_message);
-
-    printf("%s %s is an alias for: '%s'\n",name,s,argv_str);
-    /* get the first token */
-    token = strtok(argv_str, " ");
-
-    alias_argv.push_back((char *)name);
-
-    /* walk through other tokens */
-    while( token != NULL )
-    {
-        char *arg = strdup(token);
-        alias_argv.push_back((char *)arg); /* note: this is not used,... just saved to avoid valgrind from detecting a memory leak */
-
-        token = strtok(NULL, " ");
-    }
-    free(argv_str);
-
-    /* parse options with alias'd argc/argv */
-    CmdLineOptions::GetInstance()->ParseOptions(alias_argv.size(),&(alias_argv[0]));
-
-    return true;
-}
-
-/**
- * @brief
- *   constructor
- *
- * @param[in] _name - option name
- * @param[in] _usage_message - option usage message
- */
-AliasListOption::AliasListOption( const char *_name, const char *_usage_message ) : IntListOption(_name, _usage_message) {
-    SetFromEnvironmentVariable();
-}
-
-/**
- * @brief
- *   called when all list items have been processed
- */
-void AliasListOption::EndOfList() {
-    /*char *token;*/
-    std::string with_replacements = usage_message;
-    std::string full_string;
-    uint32_t i = 0;
-
-    /* replace %0 %1 %2 with corresponding list element */
-    for (std::vector<const char *>::const_iterator it = string_list_.begin(); it != string_list_.end(); ++it,i++) {
-        if (i != 0) {
-            full_string += " ";
-        }
-        full_string = full_string + *(it);
-        char search_string[10];
-        sprintf(search_string,"%%%d",i);
-        with_replacements = ReplaceString(with_replacements,search_string,*(it));
-    }
-    /* replace %* with full list of arguments */
-    with_replacements = ReplaceString(with_replacements,"%*",full_string);
-
-    printf("%s %s is an alias for: '%s'\n",name,full_string.c_str(),with_replacements.c_str());
-
-    CmdLineOptions::GetInstance()->ParseString(with_replacements.c_str());
-}
-
-/**
- * @brief
- *   constructor
- *
  * @param[in] default_value - default value if not specified on command line
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
@@ -1394,7 +1310,7 @@ void CmdLineOptions::ParseString(const char *argv_string)
     }
     free(argv_str);
 
-    /* parse options with alias'd argc/argv */
+    /* parse options with created argc/argv */
     CmdLineOptions::GetInstance()->ParseOptions(argv_vector.size(),&(argv_vector[0]));
 }
 
