@@ -9,10 +9,52 @@ adding Db_coverage=true properly adds --coverage to the compile/link lines, but 
 
 I tried adding a 'fixes:' directive to remove the '../' but it didn't seem to help.
 
-so I switched to cmake which can do in-place builds kinda,... but it turns out a cmake out-of-source build compiles with the full path to the source file, and the coverage script is fine with that.
+note: in https://codecov.io/gh/byronwatt/CmdLineOptions/branch/main -> 'browse reports', you can click on the 'view yaml' link to see what the yaml was:
 
-## sample github workflow
+i'm not sure if this comes from .codecov.yml or .github/workflows/codecov.yml, i should try adding a bogus 'fixes' option to see which files are used.
 
+```yaml
+codecov:
+  require_ci_to_pass: true
+comment:
+  behavior: default
+  layout: reach, diff, flags, files
+  require_base: false
+  require_changes: false
+  require_head: false
+  show_carryforward_flags: false
+coverage:
+  precision: 2
+  range:
+  - 70.0
+  - 100.0
+  round: down
+  status:
+    changes: false
+    default_rules:
+      flag_coverage_not_uploaded_behavior: include
+    patch:
+      default:
+        informational: true
+    project:
+      default:
+        target: auto
+        threshold: 0.5
+fixes:
+- '[.][.]/::'
+github_checks:
+  annotations: true
+```
+
+## the final fix
+
+I switched to cmake which can do in-place builds kinda,... but it turns out a cmake out-of-source build compiles with the full path to the source file, and the coverage script is fine with that.
+
+I'd rather use meson to build, but I don't know how to change meson to build from absolute path names rather than relative path names.
+
+## sample github workflow from Aniket Bhattacharyea
+
+```yaml
 name: Workflow for Codecov example-c
 on: [push, pull_request]
 jobs:
@@ -30,3 +72,4 @@ jobs:
         with:
           gcov: true
           gcov_include: calculator.c
+```
