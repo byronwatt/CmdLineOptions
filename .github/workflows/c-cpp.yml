@@ -34,6 +34,7 @@ jobs:
     - name: Run tests
       run: |
         sudo apt-get install bats
+        bats --version
         mkdir test_results
         bats --formatter junit --output test_results test/test*.bats
 
