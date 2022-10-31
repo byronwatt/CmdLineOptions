@@ -3,7 +3,7 @@
 load "libs/bats-support/load"
 load "libs/bats-assert/load"
 
-@test "uint with value between max int and max uint" {
+@test "uint64 - with value between max int and max uint" {
   run build/example some_uint64=0x8765432187654321
   [ $status -eq 0 ]
   
@@ -14,7 +14,7 @@ END
 }
 
 # doesn't fail,... just silently returns max uint64
-@test "uint much bigger than max uint" {
+@test "uint64 - much bigger than max uint" {
   run build/example some_uint64=0xff1234567812345678
   [ $status -eq 0 ]
 
@@ -24,7 +24,7 @@ option_some_uint64.value = 18446744073709551615 (0xffffffffffffffff)
 END
 }
 
-@test "bad uint" {
+@test "uint64 - bad uint" {
   run build/example some_uint64=10f
   [ $status -eq 255 ]
   assert_output --partial <<END
@@ -32,7 +32,7 @@ error parsing 'some_uint64=10f'
 END
 }
 
-@test "leading zeros does not convert to octal" {
+@test "uint64 - leading zeros does not convert to octal" {
   run build/example some_uint64=010
   [ $status -eq 0 ]
   assert_output --stdin <<END
@@ -41,7 +41,7 @@ option_some_uint64.value = 10 (0xa)
 END
 }
 
-@test "uint from environment variable" {
+@test "uint64 - from environment variable" {
   export PROJECT_NAME_some_uint64=123
   run build/example
   [ $status -eq 0 ]

@@ -3,7 +3,7 @@
 load "libs/bats-support/load"
 load "libs/bats-assert/load"
 
-@test "alone on the command line is the same as true" {
+@test "err bool - alone on the command line is the same as true" {
   run build/example_with_error_message some_bool
   [ $status -eq 0 ]
 
@@ -13,7 +13,7 @@ option_some_bool.value = true
 END
 }
 
-@test "yes" {
+@test "err bool - yes" {
   run build/example_with_error_message some_bool=yEs
   [ $status -eq 0 ]
 
@@ -23,7 +23,7 @@ option_some_bool.value = true
 END
 }
 
-@test "no" {
+@test "err bool - no" {
   run build/example_with_error_message some_bool=No
   [ $status -eq 0 ]
 
@@ -33,7 +33,7 @@ option_some_bool.value = false
 END
 }
 
-@test "true" {
+@test "err bool - true" {
   run build/example_with_error_message some_bool=truE
   [ $status -eq 0 ]
 
@@ -43,7 +43,7 @@ option_some_bool.value = true
 END
 }
 
-@test "false" {
+@test "err bool - false" {
   run build/example_with_error_message some_bool=FalsE
   [ $status -eq 0 ]
 
@@ -53,7 +53,7 @@ option_some_bool.value = false
 END
 }
 
-@test "on" {
+@test "err bool - on" {
   run build/example_with_error_message some_bool=oN
   [ $status -eq 0 ]
 
@@ -63,7 +63,7 @@ option_some_bool.value = true
 END
 }
 
-@test "off" {
+@test "err bool - off" {
   run build/example_with_error_message some_bool=oFf
   [ $status -eq 0 ]
 
@@ -73,7 +73,7 @@ option_some_bool.value = false
 END
 }
 
-@test "0" {
+@test "err bool - 0" {
   run build/example_with_error_message some_bool=0
   [ $status -eq 0 ]
 
@@ -83,7 +83,7 @@ option_some_bool.value = false
 END
 }
 
-@test "1" {
+@test "err bool - 1" {
   run build/example_with_error_message some_bool=1
   [ $status -eq 0 ]
 
@@ -93,7 +93,7 @@ option_some_bool.value = true
 END
 }
 
-@test "2 (fails)" {
+@test "err bool - 2 (fails)" {
   run build/example_with_error_message some_bool=2
   [ $status -eq 255 ]
 
@@ -103,7 +103,7 @@ END
 }
 
 # 
-@test "invalid string" {
+@test "err bool - invalid string" {
   run build/example_with_error_message some_bool=truthiness
   [ $status -eq 255 ]
 
@@ -117,7 +117,7 @@ error parsing "some_bool=truthiness"
 END
 }
 
-@test "bool from environment variable" {
+@test "err bool - from environment variable" {
   export PROJECT_NAME_some_bool=true
   run build/example_with_error_message
   [ $status -eq 0 ]

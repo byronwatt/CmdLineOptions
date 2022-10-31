@@ -4,7 +4,7 @@ load "libs/bats-support/load"
 load "libs/bats-assert/load"
 
 
-@test "no arguments no output" {
+@test "help - no arguments no output" {
   echo "running build/example"
   run build/example
   [ $status -eq 0 ]
@@ -12,7 +12,7 @@ load "libs/bats-assert/load"
 END
 }
 
-@test "bad arguments displays help message" {
+@test "help - bad arguments displays help message" {
   run build/example asdf
   [ $status -eq 255 ]
   assert_output --stdin <<END
@@ -22,7 +22,6 @@ example
   - normal parsing, asserts if a bad option is found
 
   some_bool        - testing bool option
-  some_alias       - some_bool=%0 some_alias=%0 some_enum=%0 some_int=%0 some_uint=%0 some_int64=%0 some_uint64=%0 some_intrange=%0 some_intList=: %0 %0 some_stringlist: %0 %0 some_double=%0 some_string=%0
   some_enum        - testing some_enum
   some_int         - testing some_int
   some_uint        - testing some_uint

@@ -3,8 +3,6 @@
 
 static BoolOption option_some_bool(false,"some_bool","testing bool option");
 
-static AliasOption option_some_alias("some_alias","some_bool=%0 some_alias=%0 some_enum=%0 some_int=%0 some_uint=%0 some_int64=%0 some_uint64=%0 some_intrange=%0 some_intList=: %0 %0 some_stringlist: %0 %0 some_double=%0 some_string=%0");
-
 class SomeEnumOption: public EnumOption {
 public:
     SomeEnumOption( uint32_t default_value, const char *_name, const char *_usage_message ) : EnumOption(default_value,_name,_usage_message) {
@@ -45,10 +43,6 @@ void option_test()
     {
         printf("option_some_bool.is_set\n");
         printf("option_some_bool.value = %s\n",option_some_bool.value?"true":"false");
-    }
-    if (option_some_alias.is_set)
-    {
-        printf("option_some_alias.is_set\n");
     }
     if (option_some_enum.is_set)
     {

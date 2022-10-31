@@ -3,7 +3,7 @@
 load "libs/bats-support/load"
 load "libs/bats-assert/load"
 
-@test "alone on the command line is the same as true" {
+@test "str bool - alone on the command line is the same as true" {
   run build/example_as_string some_bool
   [ $status -eq 0 ]
 
@@ -13,7 +13,7 @@ option_some_bool.value = true
 END
 }
 
-@test "yes" {
+@test "str bool - yes" {
   run build/example_as_string some_bool=yEs
   [ $status -eq 0 ]
 
@@ -23,7 +23,7 @@ option_some_bool.value = true
 END
 }
 
-@test "no" {
+@test "str bool - no" {
   run build/example_as_string some_bool=No
   [ $status -eq 0 ]
 
@@ -33,7 +33,7 @@ option_some_bool.value = false
 END
 }
 
-@test "true" {
+@test "str bool - true" {
   run build/example_as_string some_bool=truE
   [ $status -eq 0 ]
 
@@ -43,7 +43,7 @@ option_some_bool.value = true
 END
 }
 
-@test "false" {
+@test "str bool - false" {
   run build/example_as_string some_bool=FalsE
   [ $status -eq 0 ]
 
@@ -53,7 +53,7 @@ option_some_bool.value = false
 END
 }
 
-@test "on" {
+@test "str bool - on" {
   run build/example_as_string some_bool=oN
   [ $status -eq 0 ]
 
@@ -63,7 +63,7 @@ option_some_bool.value = true
 END
 }
 
-@test "off" {
+@test "str bool - off" {
   run build/example_as_string some_bool=oFf
   [ $status -eq 0 ]
 
@@ -73,7 +73,7 @@ option_some_bool.value = false
 END
 }
 
-@test "0" {
+@test "str bool - 0" {
   run build/example_as_string some_bool=0
   [ $status -eq 0 ]
 
@@ -83,7 +83,7 @@ option_some_bool.value = false
 END
 }
 
-@test "1" {
+@test "str bool - 1" {
   run build/example_as_string some_bool=1
   [ $status -eq 0 ]
 
@@ -93,7 +93,7 @@ option_some_bool.value = true
 END
 }
 
-@test "2 (fails)" {
+@test "str bool - 2 (fails)" {
   run build/example_as_string some_bool=2
   [ $status -eq 255 ]
 
@@ -103,7 +103,7 @@ END
 }
 
 # 
-@test "invalid string" {
+@test "str bool - invalid string" {
   run build/example_as_string some_bool=truthiness
   [ $status -eq 255 ]
 
@@ -114,7 +114,6 @@ example_as_string
   - this was used for creating a script file.
 
   some_bool        - testing bool option
-  some_alias       - some_bool=%0 some_alias=%0 some_enum=%0 some_int=%0 some_uint=%0 some_int64=%0 some_uint64=%0 some_intrange=%0 some_intList=: %0 %0 some_stringlist: %0 %0 some_double=%0 some_string=%0
   some_enum        - testing some_enum
   some_int         - testing some_int
   some_uint        - testing some_uint
@@ -129,7 +128,7 @@ example_as_string
 END
 }
 
-@test "bool from environment variable" {
+@test "str bool - from environment variable" {
   export PROJECT_NAME_some_bool=true
   run build/example_as_string
   [ $status -eq 0 ]
