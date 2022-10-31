@@ -93,7 +93,7 @@ option_some_bool.value = true
 END
 }
 
-@test "2" {
+@test "2 (fails)" {
   run build/example some_bool=2
   [ $status -eq 255 ]
 
