@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-load "libs/bats-support/load"
-load "libs/bats-assert/load"
+load "../libs/bats-support/load"
+load "../libs/bats-assert/load"
 
 
 @test "no arguments no output" {

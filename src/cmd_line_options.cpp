@@ -115,26 +115,6 @@ void BoolOption::Reset()
 
 /**
  * @brief
- *   searches for 'search' and replaces it with 'replace' in the string 'subject'
- *
- * @param[in] subject - source string
- * @param[in] search - search substring
- * @param[in] replace - replace substring
- *
- * @return std::string - resulting string
- */
-static std::string ReplaceString(std::string subject, const std::string& search,
-                          const std::string& replace) {
-    size_t pos = 0;
-    while((pos = subject.find(search, pos)) != std::string::npos) {
-         subject.replace(pos, search.length(), replace);
-         pos += replace.length();
-    }
-    return subject;
-}
-
-/**
- * @brief
  *   constructor
  *
  * @param[in] default_value - default value if not specified on command line
