@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-load "../libs/bats-support/load"
-load "../libs/bats-assert/load"
+load "libs/bats-support/load"
+load "libs/bats-assert/load"
 
 # note: the %0 .. %x replacements are not working for aliases !
 # (something got lost in the translation !!!!)

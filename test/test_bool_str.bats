@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-load "../libs/bats-support/load"
-load "../libs/bats-assert/load"
+load "libs/bats-support/load"
+load "libs/bats-assert/load"
 
 @test "alone on the command line is the same as true" {
   run build/example_as_string some_bool
@@ -93,7 +93,7 @@ option_some_bool.value = true
 END
 }
 
-@test "2" {
+@test "2 (fails)" {
   run build/example_as_string some_bool=2
   [ $status -eq 255 ]
 

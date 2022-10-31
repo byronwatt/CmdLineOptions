@@ -9,7 +9,9 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    # https://github.com/actions/runner-images
+    # changed from ubuntu-latest which was installing bats_1.1.0
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/setup-python@v1
@@ -17,23 +19,35 @@ jobs:
             python-version: '3.x'
     - name: Install meson/ninja
       run: pip3 install meson ninja
+
     - uses: actions/checkout@v3
       with:
         submodules: recursive
-    - name: Configure cmake
-      run: cmake -S . -B build -G Ninja
-    - name: compile
-      run: cmake --build build
-#    - name: Configure
-#      run: meson setup build -Db_coverage=true
-#    - name: Build
-#      run: meson compile -C build
-    - name: Install bats
-      run: sudo apt-get install bats
-    - name: Test
-      run: bats test/test*.bats test/test_as_string/*.bats test/test_with_error_message/*.bats
+
+    - name: build
+      run: |
+        cmake -S . -B build -G Ninja
+        cmake --build build
+#    - name: build
+#      run: |
+#        meson setup build -Db_coverage=true
+#        meson compile -C build
+
+    - name: Run tests
+      run: |
+        sudo apt-get install bats
+        bats --version
+        mkdir test_results
+        bats --formatter junit --output test_results test/test*.bats
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
         gcov: true
         token: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: Publish Test Report
+      uses: mikepenz/action-junit-report@v3
+      if: always() # always run even if the previous step fails
+      with:
+        report_paths: '**/test_results/TestReport*.xml'
