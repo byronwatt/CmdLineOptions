@@ -4,7 +4,7 @@ load "libs/bats-support/load"
 load "libs/bats-assert/load"
 
 
-@test "no arguments no output" {
+@test "help - no arguments no output" {
   echo "running build/example"
   run build/example
   [ $status -eq 0 ]
@@ -12,7 +12,7 @@ load "libs/bats-assert/load"
 END
 }
 
-@test "bad arguments displays help message" {
+@test "help - bad arguments displays help message" {
   run build/example asdf
   [ $status -eq 255 ]
   assert_output --stdin <<END

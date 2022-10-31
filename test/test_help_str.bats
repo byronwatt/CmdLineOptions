@@ -4,7 +4,7 @@ load "libs/bats-support/load"
 load "libs/bats-assert/load"
 
 
-@test "no arguments no output" {
+@test "str help - no arguments no output" {
   echo "running build/example_as_string"
   run build/example_as_string
   [ $status -eq 0 ]
@@ -12,7 +12,7 @@ load "libs/bats-assert/load"
 END
 }
 
-@test "bad arguments displays help message" {
+@test "str help - bad arguments displays help message" {
   run build/example_as_string asdf
   [ $status -eq 255 ]
   assert_output --stdin <<END

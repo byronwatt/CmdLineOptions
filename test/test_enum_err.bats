@@ -3,7 +3,7 @@
 load "libs/bats-support/load"
 load "libs/bats-assert/load"
 
-@test "integers even out of range" {
+@test "err enum - integers even out of range" {
   run build/example_with_error_message some_enum=123
   [ $status -eq 0 ]
 
@@ -14,7 +14,7 @@ END
 }
 
 # doesn't fail,... just silently returns the bottom 32 bits !!!
-@test "bad enum" {
+@test "err enum - bad enum" {
   run build/example_with_error_message some_enum=bad
   [ $status -eq 255 ]
 
@@ -31,7 +31,7 @@ error parsing "some_enum=bad"
 END
 }
 
-@test "case sensitive enum" {
+@test "err enum - case sensitive enum" {
   run build/example_with_error_message some_enum=two
   [ $status -eq 0 ]
   assert_output --stdin <<END
@@ -40,7 +40,7 @@ option_some_enum.value = 2
 END
 }
 
-@test "case insensitive enum" {
+@test "err enum - case insensitive enum" {
   run build/example_with_error_message some_enum=TwO
   [ $status -eq 0 ]
   assert_output --stdin <<END
@@ -50,7 +50,7 @@ END
 }
 
 
-@test "enum from environment variable" {
+@test "err enum - from environment variable" {
   export PROJECT_NAME_some_enum=THREe
   run build/example_with_error_message
   [ $status -eq 0 ]

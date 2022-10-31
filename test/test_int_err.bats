@@ -4,7 +4,7 @@ load "libs/bats-support/load"
 load "libs/bats-assert/load"
 
 # doesn't fail,... just silently returns the bottom 32 bits !!!
-@test "int bigger than max int" {
+@test "err int - bigger than max int" {
   run build/example_with_error_message some_int=2271560481
   [ $status -eq 0 ]
 
@@ -15,7 +15,7 @@ END
 }
 
 # doesn't fail,... just silently returns the bottom 32 bits !!!
-@test "int much bigger than max int" {
+@test "err int - much bigger than max int" {
   run build/example_with_error_message some_int=0xff12345678
   [ $status -eq 0 ]
 
@@ -25,7 +25,7 @@ option_some_int.value = 305419896
 END
 }
 
-@test "bad int" {
+@test "err int - bad int" {
   run build/example_with_error_message some_int=10f
   [ $status -eq 255 ]
   assert_output --stdin <<END
@@ -37,7 +37,7 @@ error parsing "some_int=10f"
 END
 }
 
-@test "leading zeros does not convert to octal" {
+@test "err int - leading zeros does not convert to octal" {
   run build/example_with_error_message some_int=010
   [ $status -eq 0 ]
   assert_output --stdin <<END
@@ -46,7 +46,7 @@ option_some_int.value = 10
 END
 }
 
-@test "int from environment variable" {
+@test "err int - from environment variable" {
   export PROJECT_NAME_some_int=123
   run build/example_with_error_message
   [ $status -eq 0 ]

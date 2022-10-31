@@ -3,7 +3,7 @@
 load "libs/bats-support/load"
 load "libs/bats-assert/load"
 
-@test "alone on the command line is the same as true" {
+@test "bool - alone on the command line is the same as true" {
   run build/example some_bool
   [ $status -eq 0 ]
 
@@ -13,7 +13,7 @@ option_some_bool.value = true
 END
 }
 
-@test "yes" {
+@test "bool - yes" {
   run build/example some_bool=yEs
   [ $status -eq 0 ]
 
@@ -23,7 +23,7 @@ option_some_bool.value = true
 END
 }
 
-@test "no" {
+@test "bool - no" {
   run build/example some_bool=No
   [ $status -eq 0 ]
 
@@ -33,7 +33,7 @@ option_some_bool.value = false
 END
 }
 
-@test "true" {
+@test "bool - true" {
   run build/example some_bool=truE
   [ $status -eq 0 ]
 
@@ -43,7 +43,7 @@ option_some_bool.value = true
 END
 }
 
-@test "false" {
+@test "bool - false" {
   run build/example some_bool=FalsE
   [ $status -eq 0 ]
 
@@ -53,7 +53,7 @@ option_some_bool.value = false
 END
 }
 
-@test "on" {
+@test "bool - on" {
   run build/example some_bool=oN
   [ $status -eq 0 ]
 
@@ -63,7 +63,7 @@ option_some_bool.value = true
 END
 }
 
-@test "off" {
+@test "bool - off" {
   run build/example some_bool=oFf
   [ $status -eq 0 ]
 
@@ -73,7 +73,7 @@ option_some_bool.value = false
 END
 }
 
-@test "0" {
+@test "bool - 0" {
   run build/example some_bool=0
   [ $status -eq 0 ]
 
@@ -83,7 +83,7 @@ option_some_bool.value = false
 END
 }
 
-@test "1" {
+@test "bool - 1" {
   run build/example some_bool=1
   [ $status -eq 0 ]
 
@@ -93,7 +93,7 @@ option_some_bool.value = true
 END
 }
 
-@test "2 (fails)" {
+@test "bool - 2 (fails)" {
   run build/example some_bool=2
   [ $status -eq 255 ]
 
@@ -103,7 +103,7 @@ END
 }
 
 # 
-@test "invalid string" {
+@test "bool - invalid string" {
   run build/example some_bool=truthiness
   [ $status -eq 255 ]
 

@@ -1197,16 +1197,21 @@ bool StringOption::ParseValue( const char *s ) {
 void CmdLineOptions::Usage()
  {
     uint32_t max_len = 0;
+
+    // find the string length of the largest option name
     for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
         CmdLineOption *option = *(it);
         uint32_t len = strlen(option->name);
-        if (len > max_len) max_len = len;
+        if (len > max_len) {
+            max_len = len;
+        }
     }
     for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
         CmdLineOption *option = *(it);
         if (*option->name == 0) {
             printf("%s\n",option->usage_message);
         } else {
+            // print option name left justified in the first column
             printf("  %*s - %s\n",-max_len,option->name,option->usage_message);
         }
     }
@@ -1225,16 +1230,21 @@ void CmdLineOptions::ShowUsage(std::ostream &error_message)
 {
     std::ios_base::fmtflags f( error_message.flags() );
     uint32_t max_len = 0;
+    
+    // find the string length of the largest option name
     for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
         CmdLineOption *option = *(it);
         uint32_t len = strlen(option->name);
-        if (len > max_len) max_len = len;
+        if (len > max_len) {
+            max_len = len;
+        }
     }
     for (std::vector<CmdLineOption*>::const_iterator it = option_list_.begin(); it != option_list_.end(); ++it) {
         CmdLineOption *option = *(it);
         if (*option->name == 0) {
             error_message << option->usage_message << "\n";
         } else {
+            // print option name left justified in the first column
             error_message << "  " << std::left << std::setw(max_len) << option->name
                 << " " << option->usage_message
                 << "\n";
