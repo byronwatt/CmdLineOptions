@@ -9,6 +9,9 @@ Just like how googletest doesn't need to know about all the GTEST() macros to ru
 
 ![build/test status](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml/badge.svg)
 [![Codecov](https://codecov.io/gh/byronwatt/CmdLineOptions/coverage.svg?branch=main)](https://codecov.io/gh/byronwatt/CmdLineOptions/branch/main)
+[![Issues](https://github.com/byronwatt/CmdLineOptions/issues)](https://codecov.io/gh/github/issues/:user/:repo)
+[![License](https://github.com/byronwatt/CmdLineOptions/blob/main/LICENSE)](/bower/l/:packageName)
+
 
 ## Notes from the author 
 

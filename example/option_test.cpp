@@ -1,7 +1,7 @@
 #include "cmd_line_options.h"
 #include <inttypes.h>
 
-static BoolOption option_some_Bool(false,"some_bool","testing bool option");
+static BoolOption option_some_bool(false,"some_bool","testing bool option");
 
 static AliasOption option_some_alias("some_alias","some_bool=%0 some_alias=%0 some_enum=%0 some_int=%0 some_uint=%0 some_int64=%0 some_uint64=%0 some_intrange=%0 some_intList=: %0 %0 some_stringlist: %0 %0 some_double=%0 some_string=%0");
 
@@ -41,10 +41,10 @@ static StringOption option_some_string("default","some_string","testing some_str
 
 void option_test()
 {
-    if (option_some_Bool.is_set)
+    if (option_some_bool.is_set)
     {
-        printf("option_some_Bool.is_set\n");
-        printf("option_some_Bool.value = %s\n",option_some_Bool.value?"true":"false");
+        printf("option_some_bool.is_set\n");
+        printf("option_some_bool.value = %s\n",option_some_bool.value?"true":"false");
     }
     if (option_some_alias.is_set)
     {
