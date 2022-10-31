@@ -1522,6 +1522,16 @@ bool CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostr
             if (strcmp(token,option->name) == 0) {
                 if (option->is_list) {
                     for (i=i+1;i<argc;i++) {
+                        // for OptionFreeStringList, terminate the list
+                        // if you find something that looks like another command line option
+                        if (option->is_option_free_list)
+                        {
+                            if (MatchesAnOption(argv[i]))
+                            {
+                                i--;
+                                break;
+                            }
+                        }
                         if (!option->ParseValue(argv[i])) {
                             /* start parsing arguments again at 'i',... so back i up one... */
                             i--;
