@@ -13,6 +13,18 @@ option_some_intList: 1 1 2 3 5 8 13
 END
 }
 
+@test "intlist - with extra arguments (list stops if it finds another option)" {
+  run build/example some_intList: 1 1 2 3 5 8 13 some_bool
+  [ $status -eq 0 ]
+  
+  assert_output --stdin <<END
+option_some_bool.is_set
+option_some_bool.value = true
+option_some_intList.is_set
+option_some_intList: 1 1 2 3 5 8 13
+END
+}
+
 @test "intlist - with <start>..<stop>" {
   run build/example some_intList: 0..9
   [ $status -eq 0 ]
