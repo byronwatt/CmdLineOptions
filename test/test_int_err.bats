@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-load "../libs/bats-support/load"
-load "../libs/bats-assert/load"
+load "libs/bats-support/load"
+load "libs/bats-assert/load"
 
 # doesn't fail,... just silently returns the bottom 32 bits !!!
 @test "int bigger than max int" {

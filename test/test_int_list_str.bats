@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-load "../libs/bats-support/load"
-load "../libs/bats-assert/load"
+load "libs/bats-support/load"
+load "libs/bats-assert/load"
 
 @test "some_intList: " {
   run build/example_as_string some_intList: 1 1 2 3 5 8 13

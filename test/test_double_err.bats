@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-load "../libs/bats-support/load"
-load "../libs/bats-assert/load"
+load "libs/bats-support/load"
+load "libs/bats-assert/load"
 
 @test "double with normal value" {
   run build/example_with_error_message some_double=0.0012345

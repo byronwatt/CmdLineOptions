@@ -1,10 +1,10 @@
 #!/usr/bin/env bats
 
-load "../libs/bats-support/load"
-load "../libs/bats-assert/load"
+load "libs/bats-support/load"
+load "libs/bats-assert/load"
 
 @test "uint with value between max int and max uint" {
-  run build/example_with_error_message some_uint=0x87654321
+  run build/example_as_string some_uint=0x87654321
   [ $status -eq 0 ]
   
   assert_output --stdin <<END
@@ -15,7 +15,7 @@ END
 
 # doesn't fail,... just silently returns the bottom 32 bits
 @test "uint much bigger than max uint" {
-  run build/example_with_error_message some_uint=0xff12345678
+  run build/example_as_string some_uint=0xff12345678
   [ $status -eq 0 ]
 
   assert_output --stdin <<END
@@ -25,19 +25,13 @@ END
 }
 
 @test "bad uint" {
-  run build/example_with_error_message some_uint=10f
+  run build/example_as_string some_uint=10f
   [ $status -eq 255 ]
-  assert_output --stdin <<END
-ParseOptionsOrError returned false
-error parsing '10f'
- for uint option 'some_uint'
- option description: testing some_uint
-error parsing "some_uint=10f"
-END
+  assert_output --partial "error parsing 'some_uint=10f'"
 }
 
 @test "leading zeros does not convert to octal" {
-  run build/example_with_error_message some_uint=010
+  run build/example_as_string some_uint=010
   [ $status -eq 0 ]
   assert_output --stdin <<END
 option_some_uint.is_set
@@ -47,7 +41,7 @@ END
 
 @test "uint from environment variable" {
   export PROJECT_NAME_some_uint=123
-  run build/example_with_error_message
+  run build/example_as_string
   [ $status -eq 0 ]
   assert_output --stdin <<END
 setting some_uint to "123" (from environment variable PROJECT_NAME_some_uint)
