@@ -1,9 +1,7 @@
 #include "cmd_line_options.h"
 #include <inttypes.h>
 
-static BoolOption option_some_Bool(false,"some_bool","testing bool option");
-
-static AliasOption option_some_alias("some_alias","some_bool=%0 some_alias=%0 some_enum=%0 some_int=%0 some_uint=%0 some_int64=%0 some_uint64=%0 some_intrange=%0 some_intList=: %0 %0 some_stringlist: %0 %0 some_double=%0 some_string=%0");
+static BoolOption option_some_bool(false,"some_bool","testing bool option");
 
 class SomeEnumOption: public EnumOption {
 public:
@@ -35,20 +33,19 @@ static IntListOption option_some_intList("some_intList:","testing some_intList")
 
 static StringListOption option_some_stringlist("some_stringlist:","testing some_stringlist");
 
+// quite a mouthful,... same as string list, but stop if you see another valid option
+static OptionFreeStringListOption option_optionfreestringlist("optionfreestringlist:","testing optionfreestringlist (valid option terminates list)");
+
 static DoubleOption option_some_double(0,"some_double","testing some_double");
 
 static StringOption option_some_string("default","some_string","testing some_string");
 
 void option_test()
 {
-    if (option_some_Bool.is_set)
+    if (option_some_bool.is_set)
     {
-        printf("option_some_Bool.is_set\n");
-        printf("option_some_Bool.value = %s\n",option_some_Bool.value?"true":"false");
-    }
-    if (option_some_alias.is_set)
-    {
-        printf("option_some_alias.is_set\n");
+        printf("option_some_bool.is_set\n");
+        printf("option_some_bool.value = %s\n",option_some_bool.value?"true":"false");
     }
     if (option_some_enum.is_set)
     {
@@ -82,7 +79,8 @@ void option_test()
     if (option_some_intrange.is_set)
     {
         printf("option_some_intrange.is_set\n");
-        //printf("option_some_intrange.value = \n",option_some_intrange.value);
+        printf("option_some_intrange.start_value = %d\n",option_some_intrange.start_value);
+        printf("option_some_intrange.end_value = %d\n",option_some_intrange.end_value);
     }
     if (option_some_intList.is_set)
     {
@@ -96,7 +94,20 @@ void option_test()
     if (option_some_stringlist.is_set)
     {
         printf("option_some_stringlist.is_set\n");
-        //printf("option_some_stringlist.value = \n",option_some_stringlist.value);
+        printf("option_some_stringlist:");
+        for (std::vector<const char *>::const_iterator it = option_some_stringlist.string_list_.begin(); it != option_some_stringlist.string_list_.end(); ++it) {
+            printf(" %s",*it);
+        }
+        printf("\n");
+    }
+    if (option_optionfreestringlist.is_set)
+    {
+        printf("option_optionfreestringlist.is_set\n");
+        printf("option_optionfreestringlist:");
+        for (std::vector<const char *>::const_iterator it = option_optionfreestringlist.string_list_.begin(); it != option_optionfreestringlist.string_list_.end(); ++it) {
+            printf(" %s",*it);
+        }
+        printf("\n");
     }
     if (option_some_double.is_set)
     {

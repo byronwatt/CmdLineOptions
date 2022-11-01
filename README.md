@@ -9,6 +9,9 @@ Just like how googletest doesn't need to know about all the GTEST() macros to ru
 
 ![build/test status](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml/badge.svg)
 [![Codecov](https://codecov.io/gh/byronwatt/CmdLineOptions/coverage.svg?branch=main)](https://codecov.io/gh/byronwatt/CmdLineOptions/branch/main)
+[![Issues](https://img.shields.io/github/issues/ByronWatt/CmdLineOptions)](https://github.com/byronwatt/CmdLineOptions/issues)
+[![License](https://img.shields.io/github/license/ByronWatt/CmdLineOptions)](https://github.com/byronwatt/CmdLineOptions/blob/main/LICENSE)
+
 
 ## Notes from the author 
 
@@ -44,6 +47,14 @@ The 'magic' isn't really magic, each option is a static object with a static ini
 
 This all happens before `main()` is called.
 
+## usage message
+
+If the command line parsing fails, a list of valid options and each usage message is displayed.
+
+The order of the options depends on the linker, since order of each file's static initializer is not deterministic.
+
+Within a file the options are displayed in the same order as listed, and you can add an OptionGroup to add a left-justified bit of help test to introduce a bunch of options.
+
 ## Todo: add some example code and some test scripts
 
 ## Confessions from the author
@@ -78,9 +89,7 @@ e.g.  `log_level=1` is allowed as is `-log_level=1` as is `--log_level=1` as is 
 
 There's no feature to combine a bunch of boolean options with a bunch of single letter characters.  For instance as is done with 'ls -ltr' or 'ps auxf'.
 
-There is an 'alias' feature.  e.g. you could say the option 'everything' is the same as 'verbosity=9 parse_debug=true audit_trail=audit.txt' 
-
-But there's no way to have single character options,... maybe that's just my personal preference, I'm too old to remember single character flags.
+Maybe that's just my personal preference, I'm too old to remember single character flags.
 
 ### Enumerations
 

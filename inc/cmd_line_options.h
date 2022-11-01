@@ -60,17 +60,6 @@ public:
 
 /**
  * @brief
- *   a command line parameter this is an alias for other command line options
- */
-class AliasOption: public CmdLineOption {
-public:
-    virtual bool ParseValue(const char *s);
-    AliasOption(const char *_name,const char *_usage_message);
-    std::vector<const char *> alias_argv; ///< equivalent list of parameters for this alias
-};
-
-/**
- * @brief
  *   structure used to define string -> value enumerations.
  */
 typedef struct {
@@ -249,17 +238,6 @@ public:
 
 /**
 * @brief
-*   alias command line option
-*/
-class AliasListOption: public IntListOption {
-public:
-    AliasListOption(const char *_name,const char *_usage_message);
-    virtual void EndOfList();
-    std::vector<const char *> alias_argv; ///< equivalent command line option for the alias.
-};
-
-/**
-* @brief
 *  double command line option
 */
 class DoubleOption: public CmdLineOption {
@@ -283,18 +261,6 @@ public:
     virtual void Reset();
     const char * value; ///< string command line option
     const char * _default_value; ///< string command line option
-} ;
-
-/**
-* @brief
-*  signed integer command line option
-*/
-class AddrMaskOption: public CmdLineOption {
-public:
-    AddrMaskOption( const char *_name, const char *_usage_message ) ;
-    virtual bool ParseValue( const char *s );
-    virtual void Reset();
-    addr_and_mask_t addr_and_mask; ///< address and mask
 } ;
 
 /**
