@@ -296,11 +296,12 @@ public:
     bool ParseOptionsOrError( int argc, const char **argv, std::ostream &error_message );
     void ParseString(const char *argv_string);
     bool MatchesAnOption( const char *s );
-
-    std::vector<const char*> tokens_allocated_by_ParseString; ///< extra strings created by ParseString
-    std::vector<CmdLineOption*> option_list_; ///< list of valid command line options
 private:
+
     void ParseOptionsInternal( int argc, const char **argv );
+    
+    std::vector<const char*> _tokens_allocated_by_ParseString; ///< extra strings created by ParseString
+    std::vector<CmdLineOption*> _option_list; ///< list of valid command line options
 };
 
 int32_t parse_int( const char *s, char **temp);
