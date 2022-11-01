@@ -153,8 +153,4 @@ but you probably do not want that, so I'll comment that out !
 
 ### calling functions instead of setting variables
 
-If you need to call a function in addition to setting a variable, then you can create a derived class and override the virtual function `OptionSet()` and modify it to suit.
-
-The `LogLevelOption` class shows an example of overriding EnumOption and defining a `LogLevelOption::OptionSet()` method for whenever the log_level option is changed.
-
-This might not help much since typically you would parse command line options before you've initialized various libraries.  But occasionally it's useful.
+If you need to call a function in addition to setting a variable, then you can create a derived class and override the virtual function `OptionSet()` and modify it to suit.  This function is called after an option is set.
