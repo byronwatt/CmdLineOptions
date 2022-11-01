@@ -5,10 +5,17 @@ load "libs/bats-assert/load"
 
 
 @test "help - no arguments no output" {
-  echo "running build/example"
   run build/example
   [ $status -eq 0 ]
   assert_output --stdin <<END
+END
+}
+
+@test "help - corner case - null string argument fails" {
+  run build/example ''
+  [ $status -eq 255 ]
+  assert_output --partial <<END
+  no match for ''
 END
 }
 
