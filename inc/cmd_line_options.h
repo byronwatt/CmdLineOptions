@@ -292,11 +292,14 @@ public:
     void Usage();
     void ShowUsage(std::ostream &error_message);
     void Reset();
-    void ParseOptions( int argc, const char **argv );
+    static void ParseOptions( int argc, const char **argv );
     bool ParseOptionsOrError( int argc, const char **argv, std::ostream &error_message );
     void ParseString(const char *argv_string);
     bool MatchesAnOption( const char *s );
 private:
+
+    void ParseOptionsInternal( int argc, const char **argv );
+    
     std::vector<const char*> _tokens_allocated_by_ParseString; ///< extra strings created by ParseString
     std::vector<CmdLineOption*> _option_list; ///< list of valid command line options
 };
