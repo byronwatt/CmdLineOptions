@@ -1301,7 +1301,7 @@ void CmdLineOptions::ParseString(const char *argv_string)
     free(argv_str);
 
     /* parse options with created argc/argv */
-    CmdLineOptions::GetInstance()->ParseOptions(argv_vector.size(),&(argv_vector[0]));
+    CmdLineOptions::ParseOptions(argv_vector.size(),&(argv_vector[0]));
 }
 
 
@@ -1340,14 +1340,25 @@ bool CmdLineOptions::MatchesAnOption( const char *s )
 
 /**
 * @brief
-*   an extern "C" callable version of CmdLineOptions::GetInstance->ParseOptions(argc,argv)
+*   an extern "C" callable version of CmdLineOptions::ParseOptions(argc,argv)
 *
 * @param[in] argc - number of arguments
 * @param[in] argv - argument strings
 */
 extern "C" void cmd_line_options_parse_options( int argc, const char **argv )
 {
-    CmdLineOptions::GetInstance()->ParseOptions(argc,argv);
+    CmdLineOptions::ParseOptions(argc,argv);
+}
+
+/**
+* @brief
+*   Static class menthod to wrap calls to singleton to parse options
+*
+* @param[in] argc - number of arguments
+* @param[in] argv - argument strings
+*/
+void CmdLineOptions::ParseOptions( int argc, const char **argv ) {
+    CmdLineOptions::GetInstance()->ParseOptionsInternal(argc,argv);
 }
 
 /**
@@ -1357,7 +1368,7 @@ extern "C" void cmd_line_options_parse_options( int argc, const char **argv )
 * @param[in] argc - number of arguments
 * @param[in] argv - argument strings
 */
-void CmdLineOptions::ParseOptions( int argc, const char **argv ) {
+void CmdLineOptions::ParseOptionsInternal( int argc, const char **argv ) {
     int i;
     if (strcmp(argv[0],"parse_string") != 0)
     {

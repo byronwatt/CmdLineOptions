@@ -11,7 +11,7 @@ example
 
 int main(int argc, const char **argv)
 {
-    CmdLineOptions::GetInstance()->ParseOptions(argc,argv);
+    CmdLineOptions::ParseOptions(argc,argv);
     option_test();
     return 0;
 }
