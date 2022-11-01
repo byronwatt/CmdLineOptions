@@ -1,4 +1,4 @@
-//  COPYRIGHT (C) Microchip with MIT license
+//  COPYRIGHT (C) 2022 Microchip with MIT license
 
 /**
 * @file
@@ -83,46 +83,6 @@ public:
     uint32_t value; ///< integer value
     uint32_t _default_value; ///< integer value
     std::vector<value_str_t> enum_list_; ///< list of string value pairs
-};
-
-
-/**
-* @brief
-*   structure that defines a pair of values
-*/
-typedef struct {
-    uint32_t first_value; ///< first value in a range
-    uint32_t second_value; ///< second value in a range
-    const char *str; ///< command line string?
-    const char *usage_message; ///< usage message for the pair
-} value_pair_str_t;
-
-/**
- * @brief
- *   an integer pair command line option with string equivalents.
- */
-class EnumPairOption: public CmdLineOption {
-public:
-    EnumPairOption( const char *_name, const char *_usage_message ) ;
-    virtual bool ParseValue( const char *s );
-    virtual void Reset();
-    void AddFirstEnum(uint32_t value, const char *str, const char *usage_message="");
-    void AddPairEnum(uint32_t first_value, uint32_t second_value, const char *str, const char *usage_message="");
-
-    uint32_t first_value; ///< first value in the pair
-    uint32_t second_value; ///< second value in the pair
-    std::vector<value_str_t> first_enum_list_; ///< enumeration for the first value
-    std::vector<value_pair_str_t> pair_enum_list_; ///< enumeation for the second value
-} ;
-
-/**
- * @brief
- *   an enum option for the logging level.
- */
-class LogLevelOption: public EnumOption {
-public:
-    LogLevelOption( uint32_t default_value, const char *_name, const char *_usage_message ) ;
-    virtual void OptionSet();
 };
 
 /**
@@ -306,7 +266,4 @@ private:
 
 int32_t parse_int( const char *s, char **temp);
 uint32_t parse_uint( const char *s, char **temp);
-
-/// verbosity command line option
-extern LogLevelOption option_log_level;
 

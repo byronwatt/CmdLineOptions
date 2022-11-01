@@ -125,7 +125,6 @@ example_as_string
   optionfreestringlist: - testing optionfreestringlist (valid option terminates list)
   some_double           - testing some_double
   some_string           - testing some_string
-  log_level             - set SW APPLIB logging level (0=DEBUG,1=INFO,2=WARNING,3=ERROR,4=CRITICAL)
 END
 }
 

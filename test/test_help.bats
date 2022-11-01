@@ -5,10 +5,17 @@ load "libs/bats-assert/load"
 
 
 @test "help - no arguments no output" {
-  echo "running build/example"
   run build/example
   [ $status -eq 0 ]
   assert_output --stdin <<END
+END
+}
+
+@test "help - corner case - null string argument fails" {
+  run build/example ''
+  [ $status -eq 255 ]
+  assert_output --partial <<END
+  no match for ''
 END
 }
 
@@ -33,6 +40,5 @@ example
   optionfreestringlist: - testing optionfreestringlist (valid option terminates list)
   some_double           - testing some_double
   some_string           - testing some_string
-  log_level             - set SW APPLIB logging level (0=DEBUG,1=INFO,2=WARNING,3=ERROR,4=CRITICAL)
 END
 }
