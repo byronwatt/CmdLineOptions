@@ -8,6 +8,7 @@
 
 #include <string.h>
 #include <iostream>
+#include <sstream>
 #include <iomanip>
 #include <stdlib.h>
 #include "cmd_line_options.h"
@@ -843,15 +844,15 @@ bool IntListOption::ParseValueWithError( const char *s, std::ostream &error_mess
     error_message << "list formats are:\n";
     if (default_step == 0x4)
     {
-        error_message << "   start..end e.g. " << name << "=0xd00380..0xd00388\n";
-        error_message << "   start+count e.g. " << name << "=0xd00380+2 (that's 0xd00380,0xd00384)\n";
-        error_message << "   start+count/skip e.g. " << name << "=0xd00380+2/0x20 (that's 0xd00380,0xd003A0) \n";
+        error_message << "   start..end       e.g. " << name << " 0xd00380..0xd00388\n";
+        error_message << "   start+count      e.g. " << name << " 0xd00380+2 (that's 0xd00380 0xd00384)\n";
+        error_message << "   start+count/skip e.g. " << name << " 0xd00380+2/0x20 (that's 0xd00380 0xd003A0) \n";
     }
     else
     {
-        error_message << "   start..end e.g. " << name << "=0..10\n";
-        error_message << "   start+count e.g. " << name << "=5+2 (that's 5,6)\n";
-        error_message << "   start+count/skip e.g. " << name << "=11+3/100 (that's 11,111,211) \n";
+        error_message << "   start..end       e.g. " << name << " 0..10\n";
+        error_message << "   start+count      e.g. " << name << " 5+2 (that's 5 6)\n";
+        error_message << "   start+count/skip e.g. " << name << " 11+3/100 (that's 11 111 211) \n";
     }
     return false;
 }
@@ -1257,6 +1258,23 @@ void CmdLineOptions::ParseOptionsInternal( int argc, const char **argv ) {
                             }
                         }
                         if (!option->ParseValue(argv[i])) {
+                            if (MatchesAnOption(argv[i]))
+                            {
+                                i--;
+                                break;
+                            }
+                            if (!option->ParseValue (argv[i])) {
+                                // if the next option doesn't match an option,
+                                // return an error message.
+                                if (!MatchesAnOption(argv[i])) {
+                                    std::stringstream error_message; 
+                                    printf("error parsing list item '%s'\n",argv[i]);
+                                    if (!option->ParseValueWithError(argv[i],error_message)) {
+                                        printf("%s",error_message.str().c_str());
+                                    }
+                                    Usage();
+                                }
+                            }
                             /* start parsing arguments again at 'i',... so back i up one... */
                             i--;
                             break;
@@ -1376,7 +1394,14 @@ bool CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostr
                                 break;
                             }
                         }
-                        if (!option->ParseValue(argv[i])) {
+                        if (!option->ParseValueWithError(argv[i],error_message)) {
+                            // if the next option doesn't match an option,
+                            // return an error message.
+                            if (!MatchesAnOption(argv[i]))
+                            {
+                                error_message << "error parsing \"" << argv[i] << "\"" << "\n";
+                                return false;
+                            }
                             /* start parsing arguments again at 'i',... so back i up one... */
                             i--;
                             break;
