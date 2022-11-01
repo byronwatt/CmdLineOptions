@@ -8,6 +8,7 @@
 
 #include <string.h>
 #include <iostream>
+#include <sstream>
 #include <iomanip>
 #include <stdlib.h>
 #include "cmd_line_options.h"
@@ -1257,6 +1258,23 @@ void CmdLineOptions::ParseOptionsInternal( int argc, const char **argv ) {
                             }
                         }
                         if (!option->ParseValue(argv[i])) {
+                            if (MatchesAnOption(argv[i]))
+                            {
+                                i--;
+                                break;
+                            }
+                            if (!option->ParseValue (argv[i])) {
+                                // if the next option doesn't match an option,
+                                // return an error message.
+                                if (!MatchesAnOption(argv[i])) {
+                                    std::stringstream error_message; 
+                                    printf("error parsing list item '%s'\n",argv[i]);
+                                    if (!option->ParseValueWithError(argv[i],error_message)) {
+                                        printf("%s\n",error_message.str().c_str());
+                                    }
+                                    Usage();
+                                }
+                            }
                             /* start parsing arguments again at 'i',... so back i up one... */
                             i--;
                             break;
@@ -1376,7 +1394,14 @@ bool CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostr
                                 break;
                             }
                         }
-                        if (!option->ParseValue(argv[i])) {
+                        if (!option->ParseValueWithError(argv[i],error_message)) {
+                            // if the next option doesn't match an option,
+                            // return an error message.
+                            if (!MatchesAnOption(argv[i]))
+                            {
+                                error_message << "error parsing \"" << argv[i] << "\"" << "\n";
+                                return false;
+                            }
                             /* start parsing arguments again at 'i',... so back i up one... */
                             i--;
                             break;

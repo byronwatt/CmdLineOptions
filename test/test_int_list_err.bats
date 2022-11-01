@@ -25,7 +25,17 @@ END
 @test "err intlist - with <start>..<stop> but bad integer" {
   run build/example_with_error_message some_intList: 0..9f
   [ $status -eq 255 ]
-  assert_output --partial 'no match for option "0..9f"'
+  assert_output --stdin <<END
+ParseOptionsOrError returned false
+error parsing '0..9f'
+ for IntList option 'some_intList:'
+ option description: testing some_intList
+list formats are:
+   start..end e.g. some_intList:=0..10
+   start+count e.g. some_intList:=5+2 (that's 5,6)
+   start+count/skip e.g. some_intList:=11+3/100 (that's 11,111,211) 
+error parsing "0..9f"
+END
 }
 
 @test "err intlist - skip range <start>+<size>/<skip>" {
