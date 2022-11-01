@@ -51,9 +51,9 @@ This all happens before `main()` is called.
 
 If the command line parsing fails, a list of valid options and each usage message is displayed.
 
-The order of the options depends on the linker, since order of each file's static initializer is not deterministic.
+The order of the options depends on the linker, since the order of each file's static initializer is not deterministic.
 
-Within a file the options are displayed in the same order as listed, and you can add an OptionGroup to add a left-justified bit of help test to introduce a bunch of options.
+Within a file, the options are displayed in the same order as listed, and you can add an OptionGroup to add a left-justified bit of help test to introduce a bunch of options, which is useful if you have a large number of options.
 
 ## Todo: add some example code and some test scripts
 
