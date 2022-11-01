@@ -43,10 +43,9 @@ error parsing '0..9f'
  for IntList option 'some_intList:'
  option description: testing some_intList
 list formats are:
-   start..end e.g. some_intList:=0..10
-   start+count e.g. some_intList:=5+2 (that's 5,6)
-   start+count/skip e.g. some_intList:=11+3/100 (that's 11,111,211) 
-
+   start..end       e.g. some_intList: 0..10
+   start+count      e.g. some_intList: 5+2 (that's 5 6)
+   start+count/skip e.g. some_intList: 11+3/100 (that's 11 111 211) 
 
 example
   - normal parsing, asserts if a bad option is found

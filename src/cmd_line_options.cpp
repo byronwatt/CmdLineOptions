@@ -844,15 +844,15 @@ bool IntListOption::ParseValueWithError( const char *s, std::ostream &error_mess
     error_message << "list formats are:\n";
     if (default_step == 0x4)
     {
-        error_message << "   start..end e.g. " << name << "=0xd00380..0xd00388\n";
-        error_message << "   start+count e.g. " << name << "=0xd00380+2 (that's 0xd00380,0xd00384)\n";
-        error_message << "   start+count/skip e.g. " << name << "=0xd00380+2/0x20 (that's 0xd00380,0xd003A0) \n";
+        error_message << "   start..end       e.g. " << name << " 0xd00380..0xd00388\n";
+        error_message << "   start+count      e.g. " << name << " 0xd00380+2 (that's 0xd00380 0xd00384)\n";
+        error_message << "   start+count/skip e.g. " << name << " 0xd00380+2/0x20 (that's 0xd00380 0xd003A0) \n";
     }
     else
     {
-        error_message << "   start..end e.g. " << name << "=0..10\n";
-        error_message << "   start+count e.g. " << name << "=5+2 (that's 5,6)\n";
-        error_message << "   start+count/skip e.g. " << name << "=11+3/100 (that's 11,111,211) \n";
+        error_message << "   start..end       e.g. " << name << " 0..10\n";
+        error_message << "   start+count      e.g. " << name << " 5+2 (that's 5 6)\n";
+        error_message << "   start+count/skip e.g. " << name << " 11+3/100 (that's 11 111 211) \n";
     }
     return false;
 }
@@ -1270,7 +1270,7 @@ void CmdLineOptions::ParseOptionsInternal( int argc, const char **argv ) {
                                     std::stringstream error_message; 
                                     printf("error parsing list item '%s'\n",argv[i]);
                                     if (!option->ParseValueWithError(argv[i],error_message)) {
-                                        printf("%s\n",error_message.str().c_str());
+                                        printf("%s",error_message.str().c_str());
                                     }
                                     Usage();
                                 }
