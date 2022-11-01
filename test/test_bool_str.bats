@@ -14,7 +14,7 @@ END
 }
 
 @test "str bool - yes" {
-  run build/example_as_string some_bool=yEs
+  run build/example_as_string -some_bool=yEs
   [ $status -eq 0 ]
 
   assert_output --stdin <<END
@@ -24,7 +24,7 @@ END
 }
 
 @test "str bool - no" {
-  run build/example_as_string some_bool=No
+  run build/example_as_string --some_bool=No
   [ $status -eq 0 ]
 
   assert_output --stdin <<END

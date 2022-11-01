@@ -14,7 +14,7 @@ END
 }
 
 @test "err bool - yes" {
-  run build/example_with_error_message some_bool=yEs
+  run build/example_with_error_message -some_bool=yEs
   [ $status -eq 0 ]
 
   assert_output --stdin <<END
@@ -24,7 +24,7 @@ END
 }
 
 @test "err bool - no" {
-  run build/example_with_error_message some_bool=No
+  run build/example_with_error_message --some_bool=No
   [ $status -eq 0 ]
 
   assert_output --stdin <<END
