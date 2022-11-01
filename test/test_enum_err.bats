@@ -9,7 +9,7 @@ load "libs/bats-assert/load"
 
   assert_output --stdin <<END
 option_some_enum.is_set
-option_some_enum.value = 123
+option_some_enum.value = 123 ("undefined")
 END
 }
 
@@ -36,7 +36,7 @@ END
   [ $status -eq 0 ]
   assert_output --stdin <<END
 option_some_enum.is_set
-option_some_enum.value = 2
+option_some_enum.value = 2 ("two")
 END
 }
 
@@ -45,7 +45,7 @@ END
   [ $status -eq 0 ]
   assert_output --stdin <<END
 option_some_enum.is_set
-option_some_enum.value = 2
+option_some_enum.value = 2 ("two")
 END
 }
 
@@ -57,6 +57,6 @@ END
   assert_output --stdin <<END
 setting some_enum to "THREe" (from environment variable PROJECT_NAME_some_enum)
 option_some_enum.is_set
-option_some_enum.value = 3
+option_some_enum.value = 3 ("three")
 END
 }

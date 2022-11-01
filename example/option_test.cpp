@@ -17,8 +17,6 @@ public:
 
 static SomeEnumOption option_some_enum(0,"some_enum","testing some_enum");
 
-//static EnumPairOption option_some_enumPair("some_enumPair","testing some_enumPair");
-
 static IntOption option_some_int(0,"some_int","testing some_int");
 
 static UintOption option_some_uint(0,"some_uint","testing some_uint");
@@ -50,12 +48,10 @@ void option_test()
     if (option_some_enum.is_set)
     {
         printf("option_some_enum.is_set\n");
-        printf("option_some_enum.value = %d\n",option_some_enum.value);
+        printf("option_some_enum.value = %d (\"%s\")\n",
+               option_some_enum.value,
+               option_some_enum.GetString(option_some_enum.value));
     }
-    //if (option_some_enumPair.is_set)
-    //{
-    //    printf("option_some_enumPair.is_set\n");
-    //}
     if (option_some_int.is_set)
     {
         printf("option_some_int.is_set\n");
