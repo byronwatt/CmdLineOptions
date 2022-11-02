@@ -32,6 +32,22 @@ error parsing 'some_intrange=0..10f'
 END
 }
 
+@test "intrange - start-stop" {
+  run build/example some_intrange=0-10
+  [ $status -eq 255 ]
+  assert_output --partial <<END
+error parsing 'some_intrange=0-10'
+END
+}
+
+@test "intrange - start.stop" {
+  run build/example some_intrange=0.10
+  [ $status -eq 255 ]
+  assert_output --partial <<END
+error parsing 'some_intrange=0.10'
+END
+}
+
 @test "intrange - from environment variable" {
   export PROJECT_NAME_some_intrange=0..10
   run build/example
