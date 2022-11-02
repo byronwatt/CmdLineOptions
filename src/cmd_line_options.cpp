@@ -6,13 +6,12 @@
  * Source file of command line option parsing.
  */
 
-#include <string.h>
+#include "cmd_line_options.h"
+#include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <iomanip>
 #include <stdlib.h>
-#include "cmd_line_options.h"
-
+#include <string.h>
 
 /**
  * @brief
@@ -21,18 +20,12 @@
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-CmdLineOption::CmdLineOption(const char *_name, const char *_usage_message) :
-    name(_name),
-    usage_message(_usage_message),
-    is_set(),
-    is_list(),
-    is_option_free_list(),
-    is_bool()
+CmdLineOption::CmdLineOption(const char *_name, const char *_usage_message)
+    : name(_name), usage_message(_usage_message), is_set(), is_list(), is_option_free_list(), is_bool()
 {
     // add this option to a global list of options.
     CmdLineOptions::GetInstance()->AddOption(this);
 }
-
 
 /**
  * @brief
@@ -43,7 +36,8 @@ CmdLineOption::CmdLineOption(const char *_name, const char *_usage_message) :
  *
  * @return bool - true if argument string is valid
  */
-bool CmdLineOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool CmdLineOption::ParseValueWithError(const char *s, std::ostream &error_message)
+{
     if (ParseValue(s))
         return true;
     error_message << "error parsing '" << s << "'\n";
@@ -58,7 +52,7 @@ bool CmdLineOption::ParseValueWithError( const char *s, std::ostream &error_mess
  * @return
  *   CmdLineOptions * - the singleton instance.
  */
-CmdLineOptions* CmdLineOptions::GetInstance()
+CmdLineOptions *CmdLineOptions::GetInstance()
 {
     static CmdLineOptions instance;
     return &instance;
@@ -98,11 +92,11 @@ void CmdLineOption::OptionSet()
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-BoolOption::BoolOption( bool default_value, const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message), value(default_value), _default_value(default_value) {
+BoolOption::BoolOption(bool default_value, const char *_name, const char *_usage_message)
+    : CmdLineOption(_name, _usage_message), value(default_value), _default_value(default_value)
+{
     SetFromEnvironmentVariable();
 }
-
-
 
 /**
  * @brief
@@ -122,7 +116,9 @@ void BoolOption::Reset()
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-IntOption::IntOption(int32_t default_value, const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message), value(default_value),_default_value(default_value) {
+IntOption::IntOption(int32_t default_value, const char *_name, const char *_usage_message)
+    : CmdLineOption(_name, _usage_message), value(default_value), _default_value(default_value)
+{
     SetFromEnvironmentVariable();
 }
 
@@ -145,13 +141,16 @@ void IntOption::Reset()
  *
  * @return int32_t - integer value
  */
-int32_t parse_int( const char *s, char **temp = NULL )
+int32_t parse_int(const char *s, char **temp = NULL)
 {
     int32_t value;
-    if (strncmp(s,"0x",2) == 0) {
-      value = strtol(s+2,temp,16);
-    } else {
-      value = strtol(s,temp,10);
+    if (strncmp(s, "0x", 2) == 0)
+    {
+        value = strtol(s + 2, temp, 16);
+    }
+    else
+    {
+        value = strtol(s, temp, 10);
     }
     return value;
 }
@@ -164,10 +163,12 @@ int32_t parse_int( const char *s, char **temp = NULL )
  *
  * @return bool - true if argument string is valid
  */
-bool IntOption::ParseValue( const char *s ) {
+bool IntOption::ParseValue(const char *s)
+{
     char *temp;
-    value = parse_int(s,&temp);
-    if (*temp != 0) return false;
+    value = parse_int(s, &temp);
+    if (*temp != 0)
+        return false;
     /* printf("%s=%d (%x)\n",name,option_field,option_field); */
     return true;
 }
@@ -181,7 +182,8 @@ bool IntOption::ParseValue( const char *s ) {
  *
  * @return bool - true if argument string is valid
  */
-bool IntOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool IntOption::ParseValueWithError(const char *s, std::ostream &error_message)
+{
     if (ParseValue(s))
         return true;
     error_message << "error parsing '" << s << "'\n";
@@ -198,7 +200,9 @@ bool IntOption::ParseValueWithError( const char *s, std::ostream &error_message 
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-UintOption::UintOption(uint32_t default_value, const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message), value(default_value),_default_value(default_value) {
+UintOption::UintOption(uint32_t default_value, const char *_name, const char *_usage_message)
+    : CmdLineOption(_name, _usage_message), value(default_value), _default_value(default_value)
+{
     SetFromEnvironmentVariable();
 }
 
@@ -221,13 +225,16 @@ void UintOption::Reset()
  *
  * @return int32_t - integer value
  */
-uint32_t parse_uint( const char *s, char **temp = NULL )
+uint32_t parse_uint(const char *s, char **temp = NULL)
 {
     uint32_t value;
-    if (strncmp(s,"0x",2) == 0) {
-      value = strtoul(s+2,temp,16);
-    } else {
-      value = strtoul(s,temp,10);
+    if (strncmp(s, "0x", 2) == 0)
+    {
+        value = strtoul(s + 2, temp, 16);
+    }
+    else
+    {
+        value = strtoul(s, temp, 10);
     }
     return value;
 }
@@ -240,10 +247,12 @@ uint32_t parse_uint( const char *s, char **temp = NULL )
  *
  * @return bool - true if option was valid.
  */
-bool UintOption::ParseValue( const char *s ) {
+bool UintOption::ParseValue(const char *s)
+{
     char *temp;
-    value = parse_uint(s,&temp);
-    if (*temp != 0) return false;
+    value = parse_uint(s, &temp);
+    if (*temp != 0)
+        return false;
     /* printf("%s=%d (%x)\n",name,option_field,option_field); */
     return true;
 }
@@ -257,7 +266,8 @@ bool UintOption::ParseValue( const char *s ) {
  *
  * @return bool - true if argument string is valid
  */
-bool UintOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool UintOption::ParseValueWithError(const char *s, std::ostream &error_message)
+{
     if (ParseValue(s))
         return true;
     error_message << "error parsing '" << s << "'\n";
@@ -274,7 +284,9 @@ bool UintOption::ParseValueWithError( const char *s, std::ostream &error_message
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-Int64Option::Int64Option(int64_t default_value, const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message), value(default_value),_default_value(default_value) {
+Int64Option::Int64Option(int64_t default_value, const char *_name, const char *_usage_message)
+    : CmdLineOption(_name, _usage_message), value(default_value), _default_value(default_value)
+{
     SetFromEnvironmentVariable();
 }
 
@@ -297,13 +309,16 @@ void Int64Option::Reset()
  *
  * @return int32_t - integer value
  */
-static int64_t parse_int64( const char *s, char **temp = NULL )
+static int64_t parse_int64(const char *s, char **temp = NULL)
 {
     int64_t value;
-    if (strncmp(s,"0x",2) == 0) {
-      value = strtoll(s+2,temp,16);
-    } else {
-      value = strtoll(s,temp,10);
+    if (strncmp(s, "0x", 2) == 0)
+    {
+        value = strtoll(s + 2, temp, 16);
+    }
+    else
+    {
+        value = strtoll(s, temp, 10);
     }
     return value;
 }
@@ -316,10 +331,12 @@ static int64_t parse_int64( const char *s, char **temp = NULL )
  *
  * @return bool - true if option was valid.
  */
-bool Int64Option::ParseValue( const char *s ) {
+bool Int64Option::ParseValue(const char *s)
+{
     char *temp;
-    value = parse_int64(s,&temp);
-    if (*temp != 0) return false;
+    value = parse_int64(s, &temp);
+    if (*temp != 0)
+        return false;
     /* printf("%s=%d (%x)\n",name,option_field,option_field); */
     return true;
 }
@@ -333,7 +350,8 @@ bool Int64Option::ParseValue( const char *s ) {
  *
  * @return bool - true if argument string is valid
  */
-bool Int64Option::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool Int64Option::ParseValueWithError(const char *s, std::ostream &error_message)
+{
     if (ParseValue(s))
         return true;
     error_message << "error parsing '" << s << "'\n";
@@ -350,7 +368,9 @@ bool Int64Option::ParseValueWithError( const char *s, std::ostream &error_messag
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-Uint64Option::Uint64Option(uint64_t default_value, const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message), value(default_value),_default_value(default_value) {
+Uint64Option::Uint64Option(uint64_t default_value, const char *_name, const char *_usage_message)
+    : CmdLineOption(_name, _usage_message), value(default_value), _default_value(default_value)
+{
     SetFromEnvironmentVariable();
 }
 
@@ -373,13 +393,16 @@ void Uint64Option::Reset()
  *
  * @return int32_t - integer value
  */
-static uint64_t parse_uint64( const char *s, char **temp = NULL )
+static uint64_t parse_uint64(const char *s, char **temp = NULL)
 {
     uint64_t value;
-    if (strncmp(s,"0x",2) == 0) {
-      value = strtoull(s+2,temp,16);
-    } else {
-      value = strtoull(s,temp,10);
+    if (strncmp(s, "0x", 2) == 0)
+    {
+        value = strtoull(s + 2, temp, 16);
+    }
+    else
+    {
+        value = strtoull(s, temp, 10);
     }
     return value;
 }
@@ -392,10 +415,12 @@ static uint64_t parse_uint64( const char *s, char **temp = NULL )
  *
  * @return bool - true if option was valid.
  */
-bool Uint64Option::ParseValue( const char *s ) {
+bool Uint64Option::ParseValue(const char *s)
+{
     char *temp;
-    value = parse_uint64(s,&temp);
-    if (*temp != 0) return false;
+    value = parse_uint64(s, &temp);
+    if (*temp != 0)
+        return false;
     /* printf("%s=%d (%x)\n",name,option_field,option_field); */
     return true;
 }
@@ -409,7 +434,8 @@ bool Uint64Option::ParseValue( const char *s ) {
  *
  * @return bool - true if argument string is valid
  */
-bool Uint64Option::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool Uint64Option::ParseValueWithError(const char *s, std::ostream &error_message)
+{
     if (ParseValue(s))
         return true;
     error_message << "error parsing '" << s << "'\n";
@@ -427,20 +453,23 @@ bool Uint64Option::ParseValueWithError( const char *s, std::ostream &error_messa
  *
  * @return int - same as strcmp
  */
-static int
-my_stricmp (const char *s1, const char *s2)
+static int my_stricmp(const char *s1, const char *s2)
 {
-   if (s1 == NULL) return s2 == NULL ? 0 : -(*s2);
-   if (s2 == NULL) return *s1;
+    if (s1 == NULL)
+        return s2 == NULL ? 0 : -(*s2);
+    if (s2 == NULL)
+        return *s1;
 
-   char c1, c2;
-   while ((c1 = tolower (*s1)) == (c2 = tolower (*s2)))
-   {
-     if (*s1 == '\0') break;
-     ++s1; ++s2;
-   }
+    char c1, c2;
+    while ((c1 = tolower(*s1)) == (c2 = tolower(*s2)))
+    {
+        if (*s1 == '\0')
+            break;
+        ++s1;
+        ++s2;
+    }
 
-   return c1 - c2;
+    return c1 - c2;
 }
 
 /**
@@ -451,19 +480,17 @@ my_stricmp (const char *s1, const char *s2)
  *
  * @return bool - true if option was valid.
  */
-bool BoolOption::ParseValue( const char *s ) {
-    if ((my_stricmp(s,"") == 0) ||
-        (my_stricmp(s,"1") == 0) ||
-        (my_stricmp(s,"on") == 0) ||
-        (my_stricmp(s,"yes") == 0) ||
-        (my_stricmp(s,"true") == 0)) {
+bool BoolOption::ParseValue(const char *s)
+{
+    if ((my_stricmp(s, "") == 0) || (my_stricmp(s, "1") == 0) || (my_stricmp(s, "on") == 0) ||
+        (my_stricmp(s, "yes") == 0) || (my_stricmp(s, "true") == 0))
+    {
         value = true;
         return true;
     }
-    if ((my_stricmp(s,"0") == 0) ||
-        (my_stricmp(s,"no") == 0) ||
-        (my_stricmp(s,"off") == 0) ||
-        (my_stricmp(s,"false") == 0)) {
+    if ((my_stricmp(s, "0") == 0) || (my_stricmp(s, "no") == 0) || (my_stricmp(s, "off") == 0) ||
+        (my_stricmp(s, "false") == 0))
+    {
         value = false;
         return true;
     }
@@ -479,7 +506,8 @@ bool BoolOption::ParseValue( const char *s ) {
  *
  * @return bool - true if argument string is valid
  */
-bool BoolOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool BoolOption::ParseValueWithError(const char *s, std::ostream &error_message)
+{
     if (ParseValue(s))
         return true;
     error_message << "error parsing '" << s << "'\n";
@@ -497,7 +525,9 @@ bool BoolOption::ParseValueWithError( const char *s, std::ostream &error_message
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-EnumOption::EnumOption( uint32_t default_value, const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message), value(default_value),_default_value(default_value) {
+EnumOption::EnumOption(uint32_t default_value, const char *_name, const char *_usage_message)
+    : CmdLineOption(_name, _usage_message), value(default_value), _default_value(default_value)
+{
 }
 
 /**
@@ -537,17 +567,19 @@ void EnumOption::AddEnum(uint32_t _value, const char *_str, const char *_usage_m
  *
  * @return bool - true if a match was found
  */
-static bool find_enum(std::vector<value_str_t> *enum_list, const char *s, uint32_t *value ) {
-    for (std::vector<value_str_t>::const_iterator it = enum_list->begin(); it != enum_list->end(); ++it) {
+static bool find_enum(std::vector<value_str_t> *enum_list, const char *s, uint32_t *value)
+{
+    for (std::vector<value_str_t>::const_iterator it = enum_list->begin(); it != enum_list->end(); ++it)
+    {
         value_str_t value_string = *(it);
-        if (my_stricmp(value_string.str,s)==0) {
+        if (my_stricmp(value_string.str, s) == 0)
+        {
             *value = value_string.value;
             return true;
         }
     }
     return false;
 }
-
 
 /**
  * @brief
@@ -557,25 +589,30 @@ static bool find_enum(std::vector<value_str_t> *enum_list, const char *s, uint32
  *
  * @return bool - true if enumeration was valid.
  */
-bool EnumOption::ParseValue( const char *s ) {
-    if (find_enum(&enum_list_,s,&value)) {
+bool EnumOption::ParseValue(const char *s)
+{
+    if (find_enum(&enum_list_, s, &value))
+    {
         return true;
     }
     char *temp;
-    value = parse_int(s,&temp);
-    if (*temp == 0) return true;
-    printf("unknown %s \"%s\"\n",name,s);
+    value = parse_int(s, &temp);
+    if (*temp == 0)
+        return true;
+    printf("unknown %s \"%s\"\n", name, s);
     printf("valid enumerations are: \n");
     uint32_t max_len = 0;
-    for (std::vector<value_str_t>::const_iterator it = enum_list_.begin(); it != enum_list_.end(); ++it) {
+    for (std::vector<value_str_t>::const_iterator it = enum_list_.begin(); it != enum_list_.end(); ++it)
+    {
         value_str_t value_string = *(it);
         uint32_t len = strlen(value_string.str);
         if (len > max_len)
             max_len = len;
     }
-    for (std::vector<value_str_t>::const_iterator it = enum_list_.begin(); it != enum_list_.end(); ++it) {
+    for (std::vector<value_str_t>::const_iterator it = enum_list_.begin(); it != enum_list_.end(); ++it)
+    {
         value_str_t value_string = *(it);
-        printf("  %*s 0x%02x %s\n",-max_len,value_string.str,value_string.value,value_string.usage_message);
+        printf("  %*s 0x%02x %s\n", -max_len, value_string.str, value_string.value, value_string.usage_message);
     }
     exit(-1);
     return false; // never gets here
@@ -592,45 +629,40 @@ bool EnumOption::ParseValue( const char *s ) {
  */
 bool EnumOption::ParseValueWithError(const char *s, std::ostream &error_message)
 {
-    if (find_enum(&enum_list_,s,&value))
+    if (find_enum(&enum_list_, s, &value))
     {
         return true;
     }
     char *temp;
-    value = parse_int(s,&temp);
+    value = parse_int(s, &temp);
     if (*temp == 0)
     {
         return true;
     }
 
     // save format flags
-    std::ios_base::fmtflags f( error_message.flags() );
-    error_message << "unknown "
-        << name 
-        << " \""
-        << s 
-        << "\"" 
-        << "\n";
-    error_message << "valid enumerations are: " << "\n";
+    std::ios_base::fmtflags f(error_message.flags());
+    error_message << "unknown " << name << " \"" << s << "\""
+                  << "\n";
+    error_message << "valid enumerations are: "
+                  << "\n";
     uint32_t max_len = 0;
-    for (std::vector<value_str_t>::const_iterator it = enum_list_.begin(); it != enum_list_.end(); ++it) {
+    for (std::vector<value_str_t>::const_iterator it = enum_list_.begin(); it != enum_list_.end(); ++it)
+    {
         value_str_t value_string = *(it);
         uint32_t len = strlen(value_string.str);
         if (len > max_len)
             max_len = len;
     }
-    for (std::vector<value_str_t>::const_iterator it = enum_list_.begin(); it != enum_list_.end(); ++it) {
+    for (std::vector<value_str_t>::const_iterator it = enum_list_.begin(); it != enum_list_.end(); ++it)
+    {
         value_str_t value_string = *(it);
-        error_message << "  "
-            << std::left << std::setw(max_len) << value_string.str
-            << " "
-            << value_string.usage_message << "\n";
+        error_message << "  " << std::left << std::setw(max_len) << value_string.str << " "
+                      << value_string.usage_message << "\n";
     }
-    error_message.flags( f );
+    error_message.flags(f);
     return false;
 }
-
-
 
 /**
  * @brief
@@ -640,10 +672,13 @@ bool EnumOption::ParseValueWithError(const char *s, std::ostream &error_message)
  *
  * @return string
  */
-const char *EnumOption::GetString( uint32_t x ) {
-    for (std::vector<value_str_t>::const_iterator it = enum_list_.begin(); it != enum_list_.end(); ++it) {
+const char *EnumOption::GetString(uint32_t x)
+{
+    for (std::vector<value_str_t>::const_iterator it = enum_list_.begin(); it != enum_list_.end(); ++it)
+    {
         value_str_t value_string = *(it);
-        if (value_string.value == x) {
+        if (value_string.value == x)
+        {
             return value_string.str;
         }
     }
@@ -657,11 +692,8 @@ const char *EnumOption::GetString( uint32_t x ) {
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-IntRangeOption::IntRangeOption( const char *_name, const char *_usage_message )
- : CmdLineOption(_name, _usage_message),
-   start_value(),
-   end_value(),
-   size()
+IntRangeOption::IntRangeOption(const char *_name, const char *_usage_message)
+    : CmdLineOption(_name, _usage_message), start_value(), end_value(), size()
 {
     SetFromEnvironmentVariable();
 }
@@ -683,26 +715,32 @@ void IntRangeOption::Reset()
  *
  * @return bool - true if option was valid.
  */
-bool IntRangeOption::ParseValue( const char *s ) {
+bool IntRangeOption::ParseValue(const char *s)
+{
     char *temp;
-    start_value = parse_int(s,&temp);
+    start_value = parse_int(s, &temp);
     s = temp;
-    if (*s == '+') {
+    if (*s == '+')
+    {
         s++;
-        size = parse_int(s,&temp);
-        if (*temp != 0) return false;
+        size = parse_int(s, &temp);
+        if (*temp != 0)
+            return false;
 
         end_value = start_value + size;
 
         /* printf("%s=%d (%x)\n",name,option_field,option_field); */
         return true;
     }
-    if (*s != '.') return false;
+    if (*s != '.')
+        return false;
     s++;
-    if (*s != '.') return false;
+    if (*s != '.')
+        return false;
     s++;
-    end_value = parse_int(s,&temp);
-    if (*temp != 0) return false;
+    end_value = parse_int(s, &temp);
+    if (*temp != 0)
+        return false;
 
     size = end_value - start_value;
 
@@ -719,7 +757,8 @@ bool IntRangeOption::ParseValue( const char *s ) {
  *
  * @return bool - true if argument string is valid
  */
-bool IntRangeOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool IntRangeOption::ParseValueWithError(const char *s, std::ostream &error_message)
+{
     if (ParseValue(s))
         return true;
     error_message << "error parsing '" << s << "'\n";
@@ -737,9 +776,12 @@ bool IntRangeOption::ParseValueWithError( const char *s, std::ostream &error_mes
  *
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
- * @param[in] _default_step - default step size for ranges (e.g. integer lists that are register addresses use a default step of 4)
+ * @param[in] _default_step - default step size for ranges (e.g. integer lists that are register addresses use a default
+ * step of 4)
  */
-IntListOption::IntListOption( const char *_name, const char *_usage_message, uint32_t _default_step ) : CmdLineOption(_name, _usage_message) {
+IntListOption::IntListOption(const char *_name, const char *_usage_message, uint32_t _default_step)
+    : CmdLineOption(_name, _usage_message)
+{
     this->is_list = true;
     this->default_step = _default_step;
     this->mask = 0;
@@ -747,21 +789,21 @@ IntListOption::IntListOption( const char *_name, const char *_usage_message, uin
 }
 
 /**
-* @brief end of list parsing
-*/
-void IntListOption::EndOfList() {
+ * @brief end of list parsing
+ */
+void IntListOption::EndOfList()
+{
 }
 
 /**
-* @brief end of list parsing
-*/
-void IntListOption::Reset() {
+ * @brief end of list parsing
+ */
+void IntListOption::Reset()
+{
     CmdLineOption::Reset();
     value_list_.clear();
     string_list_.clear();
 }
-
-
 
 /**
  * @brief
@@ -771,13 +813,15 @@ void IntListOption::Reset() {
  *
  * @return bool - true if option was valid.
  */
-bool IntListOption::ParseValue( const char *s ) {
+bool IntListOption::ParseValue(const char *s)
+{
     char *temp;
     int32_t value;
-    value = parse_int(s,&temp);
-    if (*temp == 0) {
+    value = parse_int(s, &temp);
+    if (*temp == 0)
+    {
         value_list_.push_back(value);
-        mask |= 1<<value;
+        mask |= 1 << value;
         string_list_.push_back(s);
         return true;
     }
@@ -786,39 +830,47 @@ bool IntListOption::ParseValue( const char *s ) {
     int32_t size;
     int32_t i;
     s = temp;
-    if (*s == '+') {
+    if (*s == '+')
+    {
         s++;
-        size = parse_int(s,&temp);
+        size = parse_int(s, &temp);
         uint32_t step = default_step;
-        if (*temp == '/') {
+        if (*temp == '/')
+        {
             s = temp;
             s++;
-            step = parse_int(s,&temp);
+            step = parse_int(s, &temp);
         }
-        if (*temp != 0) return false;
+        if (*temp != 0)
+            return false;
 
         end_value = start_value + size * step;
 
-        for (i=start_value;i<end_value;i+=step) {
+        for (i = start_value; i < end_value; i += step)
+        {
             value_list_.push_back(i);
-            mask |= 1<<i;
+            mask |= 1 << i;
         }
 
         string_list_.push_back(s);
         /* printf("%s=%d (%x)\n",name,option_field,option_field); */
         return true;
     }
-    if (*s != '.') return false;
+    if (*s != '.')
+        return false;
     s++;
-    if (*s != '.') return false;
+    if (*s != '.')
+        return false;
     s++;
-    end_value = parse_int(s,&temp);
-    if (*temp != 0) return false;
+    end_value = parse_int(s, &temp);
+    if (*temp != 0)
+        return false;
 
     size = end_value - start_value;
-    for (i=start_value;i<=end_value;i+=default_step) {
+    for (i = start_value; i <= end_value; i += default_step)
+    {
         value_list_.push_back(i);
-        mask |= 1<<i;
+        mask |= 1 << i;
     }
 
     string_list_.push_back(s);
@@ -835,7 +887,8 @@ bool IntListOption::ParseValue( const char *s ) {
  *
  * @return bool - true if argument string is valid
  */
-bool IntListOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool IntListOption::ParseValueWithError(const char *s, std::ostream &error_message)
+{
     if (ParseValue(s))
         return true;
     error_message << "error parsing '" << s << "'\n";
@@ -857,17 +910,16 @@ bool IntListOption::ParseValueWithError( const char *s, std::ostream &error_mess
     return false;
 }
 
-
-
 /**
  * @brief
  *   add a value to an integer list
  *
  * @param[in] value - value to add
  */
-void IntListOption::AddValue( const int32_t value ) {
+void IntListOption::AddValue(const int32_t value)
+{
     this->value_list_.push_back(value);
-    this->mask |= 1<<value;
+    this->mask |= 1 << value;
 }
 
 /**
@@ -877,7 +929,9 @@ void IntListOption::AddValue( const int32_t value ) {
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-OptionFreeStringListOption::OptionFreeStringListOption( const char *_name, const char *_usage_message ) : StringListOption(_name, _usage_message) {
+OptionFreeStringListOption::OptionFreeStringListOption(const char *_name, const char *_usage_message)
+    : StringListOption(_name, _usage_message)
+{
     this->is_option_free_list = true;
     SetFromEnvironmentVariable();
 }
@@ -889,26 +943,27 @@ OptionFreeStringListOption::OptionFreeStringListOption( const char *_name, const
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-StringListOption::StringListOption( const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message) {
+StringListOption::StringListOption(const char *_name, const char *_usage_message) : CmdLineOption(_name, _usage_message)
+{
     this->is_list = true;
     SetFromEnvironmentVariable();
 }
 
 /**
-* @brief end of list parsing
-*/
-void StringListOption::EndOfList() {
+ * @brief end of list parsing
+ */
+void StringListOption::EndOfList()
+{
 }
 
 /**
-* @brief end of list parsing
-*/
-void StringListOption::Reset() {
+ * @brief end of list parsing
+ */
+void StringListOption::Reset()
+{
     CmdLineOption::Reset();
     string_list_.clear();
 }
-
-
 
 /**
  * @brief
@@ -918,7 +973,8 @@ void StringListOption::Reset() {
  *
  * @return bool - true if option was valid.
  */
-bool StringListOption::ParseValue( const char *s ) {
+bool StringListOption::ParseValue(const char *s)
+{
     string_list_.push_back(s);
     return true;
 }
@@ -931,7 +987,9 @@ bool StringListOption::ParseValue( const char *s ) {
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-DoubleOption::DoubleOption( double default_value, const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message), value(default_value),_default_value(default_value) {
+DoubleOption::DoubleOption(double default_value, const char *_name, const char *_usage_message)
+    : CmdLineOption(_name, _usage_message), value(default_value), _default_value(default_value)
+{
     SetFromEnvironmentVariable();
 }
 
@@ -953,20 +1011,25 @@ void DoubleOption::Reset()
  *
  * @return bool - true if option was valid.
  */
-bool DoubleOption::ParseValue( const char *s ) {
+bool DoubleOption::ParseValue(const char *s)
+{
     char *temp = NULL;
-    value = strtod(s,&temp);
-    if (*temp == '/') {
+    value = strtod(s, &temp);
+    if (*temp == '/')
+    {
         temp++;
-        double denominator = strtod(temp,&temp);
+        double denominator = strtod(temp, &temp);
         double numerator = value;
         value = numerator / denominator;
-        printf("setting %s to %g/%g = %g\n",name,numerator,denominator,value);
+        printf("setting %s to %g/%g = %g\n", name, numerator, denominator, value);
     }
 
-    if (*temp != 0) {
+    if (*temp != 0)
+    {
         return false;
-    } else {
+    }
+    else
+    {
         return true;
     }
 }
@@ -980,14 +1043,16 @@ bool DoubleOption::ParseValue( const char *s ) {
  *
  * @return bool - true if argument string is valid
  */
-bool DoubleOption::ParseValueWithError( const char *s, std::ostream &error_message ) {
+bool DoubleOption::ParseValueWithError(const char *s, std::ostream &error_message)
+{
     if (ParseValue(s))
         return true;
     error_message << "error parsing '" << s << "'\n";
     error_message << " for Double option '" << name << "'\n";
     error_message << " option description: " << usage_message << "\n";
     error_message << "double is parsed with strtod, or numerator/denominator\n";
-    error_message << "   " << name << "=" << "11/20\n";
+    error_message << "   " << name << "="
+                  << "11/20\n";
     return false;
 }
 
@@ -999,7 +1064,9 @@ bool DoubleOption::ParseValueWithError( const char *s, std::ostream &error_messa
  * @param[in] _name - option name
  * @param[in] _usage_message - option usage message
  */
-StringOption::StringOption( const char *default_value, const char *_name, const char *_usage_message ) : CmdLineOption(_name, _usage_message), value(default_value),_default_value(default_value) {
+StringOption::StringOption(const char *default_value, const char *_name, const char *_usage_message)
+    : CmdLineOption(_name, _usage_message), value(default_value), _default_value(default_value)
+{
     SetFromEnvironmentVariable();
 }
 
@@ -1021,85 +1088,97 @@ void StringOption::Reset()
  *
  * @return bool - true if option was valid.
  */
-bool StringOption::ParseValue( const char *s ) {
+bool StringOption::ParseValue(const char *s)
+{
     value = s;
     return true;
 }
 
 /**
-* @brief
-*   display a usage message to stdout
-*/
+ * @brief
+ *   display a usage message to stdout
+ */
 void CmdLineOptions::Usage()
- {
+{
     uint32_t max_len = 0;
-    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
+    for (std::vector<CmdLineOption *>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it)
+    {
 
         CmdLineOption *option = *(it);
         uint32_t len = strlen(option->name);
-        if (len > max_len) {
+        if (len > max_len)
+        {
             max_len = len;
         }
     }
-    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
+    for (std::vector<CmdLineOption *>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it)
+    {
         CmdLineOption *option = *(it);
-        if (*option->name == 0) {
-            printf("%s\n",option->usage_message);
-        } else {
+        // the 'GroupOption' has no option name and just injects a left justified string into the usage message
+        if (*option->name == 0)
+        {
+            printf("%s\n", option->usage_message);
+        }
+        else
+        {
             // print option name left justified in the first column
-            printf("  %*s - %s\n",-max_len,option->name,option->usage_message);
+            printf("  %*s - %s\n", -max_len, option->name, option->usage_message);
         }
     }
     exit(-1);
 }
 
-
-
 /**
-* @brief
-*   display a usage message to ostream
-*
-* @param[out] error_message - output stream to format error message.
-*/
+ * @brief
+ *   display a usage message to ostream
+ *
+ * @param[out] error_message - output stream to format error message.
+ */
 void CmdLineOptions::ShowUsage(std::ostream &error_message)
 {
-    std::ios_base::fmtflags f( error_message.flags() );
+    std::ios_base::fmtflags f(error_message.flags());
     uint32_t max_len = 0;
-    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
+    for (std::vector<CmdLineOption *>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it)
+    {
 
         CmdLineOption *option = *(it);
         uint32_t len = strlen(option->name);
-        if (len > max_len) {
+        if (len > max_len)
+        {
             max_len = len;
         }
     }
-    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
+    for (std::vector<CmdLineOption *>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it)
+    {
         CmdLineOption *option = *(it);
-        if (*option->name == 0) {
+        if (*option->name == 0)
+        {
             error_message << option->usage_message << "\n";
-        } else {
+        }
+        else
+        {
             // print option name left justified in the first column
-            error_message << "  " << std::left << std::setw(max_len) << option->name
-                << " " << option->usage_message
-                << "\n";
+            error_message << "  " << std::left << std::setw(max_len) << option->name << " " << option->usage_message
+                          << "\n";
         }
     }
-    error_message.flags( f );
+    error_message.flags(f);
 }
 
-
 /**
-* @brief
-*   reset options to default
-*/
+ * @brief
+ *   reset options to default
+ */
 void CmdLineOptions::Reset()
- {
-    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
+{
+    for (std::vector<CmdLineOption *>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it)
+    {
         CmdLineOption *option = *(it);
         option->Reset();
     }
     std::vector<const char *>::const_iterator it;
-    for (it = _tokens_allocated_by_ParseString.begin(); it != _tokens_allocated_by_ParseString.end(); ++it) {
+    for (it = _tokens_allocated_by_ParseString.begin(); it != _tokens_allocated_by_ParseString.end(); ++it)
+    {
         const char *arg = *it;
         free((void *)arg);
     }
@@ -1107,11 +1186,11 @@ void CmdLineOptions::Reset()
 }
 
 /**
-* @brief
-*   parse a space separated list of arguments as if they were specified as command line arguments
-*
-* @param[in] argv_string - space separated list of command line arguments
-*/
+ * @brief
+ *   parse a space separated list of arguments as if they were specified as command line arguments
+ *
+ * @param[in] argv_string - space separated list of command line arguments
+ */
 void CmdLineOptions::ParseString(const char *argv_string)
 {
     char *argv_str = strdup(argv_string);
@@ -1124,10 +1203,11 @@ void CmdLineOptions::ParseString(const char *argv_string)
     argv_vector.push_back("parse_string");
 
     /* walk through other tokens */
-    while( token != NULL )
+    while (token != NULL)
     {
         char *arg = strdup(token);
-        _tokens_allocated_by_ParseString.push_back(arg); /* note: this is not used,... just saved to avoid valgrind from detecting a memory leak */
+        _tokens_allocated_by_ParseString.push_back(
+            arg); /* note: this is not used,... just saved to avoid valgrind from detecting a memory leak */
         argv_vector.push_back((char *)arg);
 
         token = strtok(NULL, " ");
@@ -1135,37 +1215,41 @@ void CmdLineOptions::ParseString(const char *argv_string)
     free(argv_str);
 
     /* parse options with created argc/argv */
-    CmdLineOptions::ParseOptions(argv_vector.size(),&(argv_vector[0]));
+    CmdLineOptions::ParseOptions(argv_vector.size(), &(argv_vector[0]));
 }
 
-
 /**
-* @brief
-*   returns true if the string matches a valid command line option
-*
-* @param[in] s - string
-* @return true if 's' matches a command line option, false otherwise.
-*/
-bool CmdLineOptions::MatchesAnOption( const char *s )
+ * @brief
+ *   returns true if the string matches a valid command line option
+ *
+ * @param[in] s - string
+ * @return true if 's' matches a command line option, false otherwise.
+ */
+bool CmdLineOptions::MatchesAnOption(const char *s)
 {
     char token[100];
     char *equals;
 
     /* make the '-' optional */
-    if (s[0] == '-') {
+    if (s[0] == '-')
+    {
         s++;
-        if (s[0] == '-') {
+        if (s[0] == '-')
+        {
             s++;
         }
     }
-    strncpy(token,s,99);
-    equals = strchr(token,'=');
-    if (equals != NULL) {
-        *equals=0;
+    strncpy(token, s, 99);
+    equals = strchr(token, '=');
+    if (equals != NULL)
+    {
+        *equals = 0;
     }
-    for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
+    for (std::vector<CmdLineOption *>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it)
+    {
         CmdLineOption *option = *(it);
-        if (strcmp(token,option->name) == 0) {
+        if (strcmp(token, option->name) == 0)
+        {
             return true;
         }
     }
@@ -1173,45 +1257,48 @@ bool CmdLineOptions::MatchesAnOption( const char *s )
 }
 
 /**
-* @brief
-*   an extern "C" callable version of CmdLineOptions::ParseOptions(argc,argv)
-*
-* @param[in] argc - number of arguments
-* @param[in] argv - argument strings
-*/
-extern "C" void cmd_line_options_parse_options( int argc, const char **argv )
+ * @brief
+ *   an extern "C" callable version of CmdLineOptions::ParseOptions(argc,argv)
+ *
+ * @param[in] argc - number of arguments
+ * @param[in] argv - argument strings
+ */
+extern "C" void cmd_line_options_parse_options(int argc, const char **argv)
 {
-    CmdLineOptions::ParseOptions(argc,argv);
+    CmdLineOptions::ParseOptions(argc, argv);
 }
 
 /**
-* @brief
-*   Static class menthod to wrap calls to singleton to parse options
-*
-* @param[in] argc - number of arguments
-* @param[in] argv - argument strings
-*/
-void CmdLineOptions::ParseOptions( int argc, const char **argv ) {
-    CmdLineOptions::GetInstance()->ParseOptionsInternal(argc,argv);
+ * @brief
+ *   Static class menthod to wrap calls to singleton to parse options
+ *
+ * @param[in] argc - number of arguments
+ * @param[in] argv - argument strings
+ */
+void CmdLineOptions::ParseOptions(int argc, const char **argv)
+{
+    CmdLineOptions::GetInstance()->ParseOptionsInternal(argc, argv);
 }
 
 /**
-* @brief
-*   parse command line options
-*
-* @param[in] argc - number of arguments
-* @param[in] argv - argument strings
-*/
-void CmdLineOptions::ParseOptionsInternal( int argc, const char **argv ) {
+ * @brief
+ *   parse command line options
+ *
+ * @param[in] argc - number of arguments
+ * @param[in] argv - argument strings
+ */
+void CmdLineOptions::ParseOptionsInternal(int argc, const char **argv)
+{
     int i;
-    if (strcmp(argv[0],"parse_string") != 0)
+    if (strcmp(argv[0], "parse_string") != 0)
     {
         std::string window_title;
-        if (strrchr(argv[0],'/') != NULL)
-            window_title = strrchr(argv[0],'/')+1;
+        if (strrchr(argv[0], '/') != NULL)
+            window_title = strrchr(argv[0], '/') + 1;
         else
             window_title = argv[0];
-        for (i = 1;i<argc;i++) {
+        for (i = 1; i < argc; i++)
+        {
             const char *s = argv[i];
             window_title += " ";
             window_title += s;
@@ -1219,34 +1306,44 @@ void CmdLineOptions::ParseOptionsInternal( int argc, const char **argv ) {
         // modify the xterm window title to match the program name
         // printf("\033]0;%s\007",window_title.c_str());
     }
-    for (i = 1;i<argc;i++) {
+    for (i = 1; i < argc; i++)
+    {
         const char *s = argv[i];
         char token[100];
         const char *val_str;
         char *equals;
 
         /* make the '-' optional */
-        if (s[0] == '-') {
+        if (s[0] == '-')
+        {
             s++;
-            if (s[0] == '-') {
+            if (s[0] == '-')
+            {
                 s++;
             }
         }
-        strncpy(token,s,99);
-        equals = strchr(token,'=');
-        if (equals == NULL) {
+        strncpy(token, s, 99);
+        equals = strchr(token, '=');
+        if (equals == NULL)
+        {
             val_str = (char *)"";
-        } else {
-            *equals=0;
+        }
+        else
+        {
+            *equals = 0;
             equals++;
-            val_str = &s[equals-token];
+            val_str = &s[equals - token];
         }
         bool matched = false;
-        for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
+        for (std::vector<CmdLineOption *>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it)
+        {
             CmdLineOption *option = *(it);
-            if (strcmp(token,option->name) == 0) {
-                if (option->is_list) {
-                    for (i=i+1;i<argc;i++) {
+            if (strcmp(token, option->name) == 0)
+            {
+                if (option->is_list)
+                {
+                    for (i = i + 1; i < argc; i++)
+                    {
                         // for OptionFreeStringList, terminate the list
                         // if you find something that looks like another command line option
                         if (option->is_option_free_list)
@@ -1257,20 +1354,24 @@ void CmdLineOptions::ParseOptionsInternal( int argc, const char **argv ) {
                                 break;
                             }
                         }
-                        if (!option->ParseValue(argv[i])) {
+                        if (!option->ParseValue(argv[i]))
+                        {
                             if (MatchesAnOption(argv[i]))
                             {
                                 i--;
                                 break;
                             }
-                            if (!option->ParseValue (argv[i])) {
+                            if (!option->ParseValue(argv[i]))
+                            {
                                 // if the next option doesn't match an option,
                                 // return an error message.
-                                if (!MatchesAnOption(argv[i])) {
-                                    std::stringstream error_message; 
-                                    printf("error parsing list item '%s'\n",argv[i]);
-                                    if (!option->ParseValueWithError(argv[i],error_message)) {
-                                        printf("%s",error_message.str().c_str());
+                                if (!MatchesAnOption(argv[i]))
+                                {
+                                    std::stringstream error_message;
+                                    printf("error parsing list item '%s'\n", argv[i]);
+                                    if (!option->ParseValueWithError(argv[i], error_message))
+                                    {
+                                        printf("%s", error_message.str().c_str());
                                     }
                                     Usage();
                                 }
@@ -1281,9 +1382,12 @@ void CmdLineOptions::ParseOptionsInternal( int argc, const char **argv ) {
                         }
                     }
                     option->EndOfList();
-                } else {
-                    if (!option->ParseValue(val_str)) {
-                        printf("error parsing '%s'\n",argv[i]);
+                }
+                else
+                {
+                    if (!option->ParseValue(val_str))
+                    {
+                        printf("error parsing '%s'\n", argv[i]);
                         Usage();
                     }
                 }
@@ -1292,28 +1396,30 @@ void CmdLineOptions::ParseOptionsInternal( int argc, const char **argv ) {
                 matched = true;
             }
         }
-        if (!matched) {
-            printf("no match for '%s'\n",token);
+        if (!matched)
+        {
+            printf("no match for '%s'\n", token);
             Usage();
         }
     }
 }
 
 /**
-* @brief
-*   check the environment variable project_name
-*
-* Unfortunately, this cannot be called from the base class constructor,
-* because the virtual function ParseValue() is not initialized until the derived class is constructed.
-*/
+ * @brief
+ *   check the environment variable project_name
+ *
+ * Unfortunately, this cannot be called from the base class constructor,
+ * because the virtual function ParseValue() is not initialized until the derived class is constructed.
+ */
 void CmdLineOption::SetFromEnvironmentVariable()
 {
     char env_name[100];
-    snprintf(env_name,sizeof(env_name),"PROJECT_NAME_%s",name);
+    snprintf(env_name, sizeof(env_name), "PROJECT_NAME_%s", name);
     char *env_value = getenv(env_name);
-    if (env_value == NULL) {
+    if (env_value == NULL)
+    {
         // also look for the uppercase version of the option
-        for (char *s = env_name;*s!=0;s++)
+        for (char *s = env_name; *s != 0; s++)
         {
             if (islower(*s))
             {
@@ -1322,10 +1428,12 @@ void CmdLineOption::SetFromEnvironmentVariable()
         }
         env_value = getenv(env_name);
     }
-    if (env_value != NULL) {
-        printf("setting %s to \"%s\" (from environment variable %s)\n",name,env_value,env_name);
-        if (!ParseValue(env_value)) {
-            printf("error parsing '%s'\n",env_value);
+    if (env_value != NULL)
+    {
+        printf("setting %s to \"%s\" (from environment variable %s)\n", name, env_value, env_name);
+        if (!ParseValue(env_value))
+        {
+            printf("error parsing '%s'\n", env_value);
             CmdLineOptions::GetInstance()->Usage();
         }
         OptionSet();
@@ -1334,56 +1442,66 @@ void CmdLineOption::SetFromEnvironmentVariable()
 }
 
 /**
-* @brief
-*   add an option to the global list of options
-*
-* @param[in] option - option to add
-*/
+ * @brief
+ *   add an option to the global list of options
+ *
+ * @param[in] option - option to add
+ */
 void CmdLineOptions::AddOption(CmdLineOption *option)
 {
     _option_list.push_back(option);
 }
 
 /**
-* @brief
-*   parse command line options or generate error message
-*
-* @param[in] argc - number of arguments
-* @param[in] argv - argument strings
-* @param[in] error_message - error message
-*
-* @return true if successful, false otherwise.
-*/
-bool CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostream &error_message ) 
+ * @brief
+ *   parse command line options or generate error message
+ *
+ * @param[in] argc - number of arguments
+ * @param[in] argv - argument strings
+ * @param[in] error_message - error message
+ *
+ * @return true if successful, false otherwise.
+ */
+bool CmdLineOptions::ParseOptionsOrError(int argc, const char **argv, std::ostream &error_message)
 {
-    for (int i = 0;i<argc;i++) {
+    for (int i = 0; i < argc; i++)
+    {
         const char *s = argv[i];
         char token[100];
         const char *val_str;
         char *equals;
 
         /* make the '-' optional */
-        if (s[0] == '-') {
+        if (s[0] == '-')
+        {
             s++;
         }
-        if (s[0] == '-') {
+        if (s[0] == '-')
+        {
             s++;
         }
-        strncpy(token,s,99);
-        equals = strchr(token,'=');
-        if (equals == NULL) {
+        strncpy(token, s, 99);
+        equals = strchr(token, '=');
+        if (equals == NULL)
+        {
             val_str = (char *)"";
-        } else {
-            *equals=0;
+        }
+        else
+        {
+            *equals = 0;
             equals++;
-            val_str = &s[equals-token];
+            val_str = &s[equals - token];
         }
         bool matched = false;
-        for (std::vector<CmdLineOption*>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it) {
+        for (std::vector<CmdLineOption *>::const_iterator it = _option_list.begin(); it != _option_list.end(); ++it)
+        {
             CmdLineOption *option = *(it);
-            if (strcmp(token,option->name) == 0) {
-                if (option->is_list) {
-                    for (i=i+1;i<argc;i++) {
+            if (strcmp(token, option->name) == 0)
+            {
+                if (option->is_list)
+                {
+                    for (i = i + 1; i < argc; i++)
+                    {
                         // for OptionFreeStringList, terminate the list
                         // if you find something that looks like another command line option
                         if (option->is_option_free_list)
@@ -1394,12 +1512,14 @@ bool CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostr
                                 break;
                             }
                         }
-                        if (!option->ParseValueWithError(argv[i],error_message)) {
+                        if (!option->ParseValueWithError(argv[i], error_message))
+                        {
                             // if the next option doesn't match an option,
                             // return an error message.
                             if (!MatchesAnOption(argv[i]))
                             {
-                                error_message << "error parsing \"" << argv[i] << "\"" << "\n";
+                                error_message << "error parsing \"" << argv[i] << "\""
+                                              << "\n";
                                 return false;
                             }
                             /* start parsing arguments again at 'i',... so back i up one... */
@@ -1408,9 +1528,13 @@ bool CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostr
                         }
                     }
                     option->EndOfList();
-                } else {
-                    if (!option->ParseValueWithError(val_str,error_message)) {
-                        error_message << "error parsing \"" << argv[i] << "\"" << "\n";
+                }
+                else
+                {
+                    if (!option->ParseValueWithError(val_str, error_message))
+                    {
+                        error_message << "error parsing \"" << argv[i] << "\""
+                                      << "\n";
                         return false;
                     }
                 }
@@ -1419,8 +1543,10 @@ bool CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostr
                 matched = true;
             }
         }
-        if (!matched) {
-            error_message << "no match for option \"" << token << "\"" << "\n";
+        if (!matched)
+        {
+            error_message << "no match for option \"" << token << "\""
+                          << "\n";
             ShowUsage(error_message);
             return false;
         }
@@ -1431,7 +1557,8 @@ bool CmdLineOptions::ParseOptionsOrError( int argc, const char **argv, std::ostr
 CmdLineOptions::~CmdLineOptions()
 {
     std::vector<const char *>::const_iterator it;
-    for (it = _tokens_allocated_by_ParseString.begin(); it != _tokens_allocated_by_ParseString.end(); ++it) {
+    for (it = _tokens_allocated_by_ParseString.begin(); it != _tokens_allocated_by_ParseString.end(); ++it)
+    {
         const char *arg = *it;
         free((void *)arg);
     }

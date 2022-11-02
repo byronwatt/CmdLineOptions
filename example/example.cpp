@@ -4,14 +4,14 @@ void option_test();
 
 // OptionGroup just inserts a help message, doesn't affect parsing.
 OptionGroup option_help_message(
-R"~(
+    R"~(
 example
   - normal parsing, asserts if a bad option is found
 )~");
 
 int main(int argc, const char **argv)
 {
-    CmdLineOptions::ParseOptions(argc,argv);
+    CmdLineOptions::ParseOptions(argc, argv);
     option_test();
     return 0;
 }

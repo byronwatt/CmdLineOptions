@@ -25,25 +25,35 @@ cd CmdLineOptions
 git submodule init
 git submodule update
 ```
-## configure
-```bash
-meson setup build
-```
 ## compile
 ```bash
-meson compile -C build
+make all
 ```
-## run example
+## compile & test
+
 ```bash
-build/example --help
+make test
 ```
-## run tests
+## reformat the source code
+
+```bash
+make tidy
 ```
-bats test/test*.bats
+
+this runs clang-format
+## run a single test
 ```
+bats test/test_bool.bats
+```
+
+## coverage report
+
+```bash
+make coverage_report
+```
+
+Then open html/index.html in your browser.
+
 ## debugging
 gdb is currently failing to run so need to figure out how to install a real development environment (and still pay nothing because I'm CHEAP)
 
-# coverage
-
-meson setup coverage -Db_coverage=true
