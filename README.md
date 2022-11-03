@@ -7,11 +7,10 @@ Just like how googletest doesn't need to know about all the GTEST() macros to ru
 
 ## build status
 
-![build/test status](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml/badge.svg)
+[![build/test status](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml)
 [![Codecov](https://codecov.io/gh/byronwatt/CmdLineOptions/coverage.svg?branch=main)](https://codecov.io/gh/byronwatt/CmdLineOptions/branch/main)
 [![Issues](https://img.shields.io/github/issues/ByronWatt/CmdLineOptions)](https://github.com/byronwatt/CmdLineOptions/issues)
 [![License](https://img.shields.io/github/license/ByronWatt/CmdLineOptions)](https://github.com/byronwatt/CmdLineOptions/blob/main/LICENSE)
-
 
 ## Notes from the author 
 
