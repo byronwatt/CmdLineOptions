@@ -5,6 +5,8 @@ This command line parser lets you scatter options throughout your code base, and
 
 Just like how googletest doesn't need to know about all the GTEST() macros to run those tests, this command line parser doesn't need to know about all the command line options exposed in your code.
 
+Note: This is not a microchip supported project, I'm mostly using this project to personally learn github features, and also to release this code as open source should anyone want to use it.
+
 ## build status
 
 [![build/test status](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/byronwatt/CmdLineOptions/actions/workflows/c-cpp.yml)
